@@ -84,6 +84,10 @@ public abstract class Hero {
         return hitPoints;
     }
 
+    public Integer computeMapSize(){
+        return ((this.level - 1) * 5 + 10 - (this.level % 2));
+    }
+
 
 
 

@@ -3,7 +3,7 @@ package model.villain;
 import exceptions.VillainClassNotFoundException;
 
 public class VillainFactory {
-    public Villain getVillain(String name) throws VillainClassNotFoundException {
+    public static Villain getVillain(String name) throws VillainClassNotFoundException {
         if (VillainEnum.BARBARES.getName().equals(name))
             return new Barbares(name, VillainEnum.BARBARES.getPower(), null);
         if (VillainEnum.SQUELETTES.getName().equals(name))
