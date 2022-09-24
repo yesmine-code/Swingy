@@ -11,11 +11,14 @@ import java.util.Random;
 
 public class MapService {
     private Hero hero;
-    private List<Villain> villains;
     private Villain[][] map;
     private VillainService villainService;
 
-    public MapService(Hero hero) throws VillainClassNotFoundException {
+    public MapService(VillainService villainService) {
+        this.villainService = villainService;
+    }
+
+    public void initMap(Hero hero) throws VillainClassNotFoundException {
         this.hero = hero;
         Integer size = hero.computeMapSize();
         map = new Villain[size][size];
