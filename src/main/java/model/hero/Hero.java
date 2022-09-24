@@ -10,6 +10,7 @@ public abstract class Hero {
     private Integer attack;
     private Integer defence;
     private  Integer hitPoints;
+    private Position position;
 
     public Hero(String name, String heroClass, Integer level, Integer experience, Integer attack, Integer defence, Integer hitPoints, Artefact artefact) {
         this.name = name;
@@ -20,6 +21,14 @@ public abstract class Hero {
         this.defence = defence;
         this.hitPoints = hitPoints;
         this.artefact = null;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     public Artefact getArtefact() {
