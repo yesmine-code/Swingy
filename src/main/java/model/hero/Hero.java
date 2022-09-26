@@ -12,6 +12,8 @@ public abstract class Hero {
     private  Integer hitPoints;
     private Position position;
 
+    private Artefact artefact;
+
     public Hero(String name, String heroClass, Integer level, Integer experience, Integer attack, Integer defence, Integer hitPoints, Artefact artefact) {
         this.name = name;
         this.heroClass = heroClass;
@@ -20,7 +22,7 @@ public abstract class Hero {
         this.attack = attack;
         this.defence = defence;
         this.hitPoints = hitPoints;
-        this.artefact = null;
+        this.artefact = artefact;
     }
 
     public Position getPosition() {
@@ -39,7 +41,6 @@ public abstract class Hero {
         this.artefact = artefact;
     }
 
-    private Artefact artefact;
 
     public void setName(String name) {
         this.name = name;
@@ -93,13 +94,22 @@ public abstract class Hero {
         return hitPoints;
     }
 
+
     public Integer computeMapSize(){
         return ((this.level - 1) * 5 + 10 - (this.level % 2));
     }
 
 
 
-
-
-
+    @Override
+    public String toString() {
+        return "Hero{" +
+                "name='" + name + '\'' +
+                ", heroClass='" + heroClass + '\'' +
+                ", attack=" + attack +
+                ", defence=" + defence +
+                ", hitPoints=" + hitPoints +
+                ", artefact=" + artefact +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import exceptions.ArtefactNotFoundException;
 import exceptions.HeroClassNotFoundException;
 import model.artefacts.Artefact;
 import model.hero.Hero;
@@ -11,19 +12,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class HeroService {
+    private ArtefactService artefactService;
 
-    public Hero createHero(String heroClass, String name) throws HeroClassNotFoundException {
-        return (HeroFactory.createHero(name, heroClass));
+    public HeroService(){
+        this.artefactService = new ArtefactService();
     }
 
-    public List<Hero> getCreatedHeroes() {
-        //todo
-        return null;
+    public Hero createHero(String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException {
+        return (HeroFactory.createHero(name, heroClass, artefactService.createArtefact(artefact)));
     }
 
-    public void saveHero(Hero hero) {
-        //todo
-    }
 
     public List<String> getHeroClasses() {
         return Arrays.stream(HeroEnum.values()).map(Enum::toString).collect(Collectors.toList());

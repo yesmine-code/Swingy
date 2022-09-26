@@ -13,5 +13,8 @@ public abstract class Artefact {
         this.hitPointsAffect = hitPointsAffect;
     }
 
-
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -12,6 +12,8 @@ public enum HeroEnum {
     private Integer attack;
     private Integer defence;
     private Integer hitPoints;
+
+
     HeroEnum(Integer attack, Integer defence, Integer hitPoints) {
         this.attack = attack;
         this.defence = defence;

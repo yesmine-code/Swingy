@@ -1,9 +1,9 @@
 package model.artefacts;
 
 public enum ArtefactEnum {
-    GUNWEAPON("gun", 1200),
-    KNIFEWEAPON("knife", 1000),
-    FIREWEAPON("fire", 900),
+    GUNWEAPON("gunWeapon", 1200),
+    KNIFEWEAPON("knifeWeapon", 1000),
+    FIREWEAPON("fireWeapon", 900),
     BREASTARMOR("breastArmor", 500),
     HEADARMOR("headArmor", 700),
     FACEARMOR("faceArmor", 400),
