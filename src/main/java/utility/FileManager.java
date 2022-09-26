@@ -40,5 +40,10 @@ public class FileManager {
             System.out.println("An error occurred.");
         }
     }
+    public static void makeFileEmpty() throws java.io.FileNotFoundException {
+        PrintWriter writer = new PrintWriter(file.getName());
+        writer.print("");
+        writer.close();
+    }
 
 }

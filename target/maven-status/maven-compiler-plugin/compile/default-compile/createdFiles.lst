@@ -1,7 +1,12 @@
 model/artefacts/Helm.class
+controller/SwingyController.class
+controller/MapService.class
 exceptions/ArtefactNotFoundException.class
 model/villain/Barbares.class
 model/hero/Prince.class
+App.class
+view/console/Colors.class
+view/console/Viewer.class
 org/yesmine/App.class
 model/hero/MoveEnum.class
 model/hero/HeroFactory.class
@@ -12,6 +17,7 @@ model/villain/VillainEnum.class
 controller/VillainService.class
 model/hero/Pekka.class
 model/artefacts/Artefact.class
+exceptions/FileNotFoundException.class
 model/hero/Valkyrie.class
 controller/ArtefactService.class
 model/hero/Sorcier.class
@@ -24,7 +30,11 @@ exceptions/HeroClassNotFoundException.class
 controller/HeroService.class
 model/villain/VillainFactory.class
 model/hero/Hero.class
+model/hero/Position.class
+dao/HeroDao.class
+utility/FileManager.class
 model/artefacts/ArtefactFactory.class
+dao/FileDao.class
 model/villain/Villain.class
 model/hero/Dragon.class
 model/villain/Squelettes.class

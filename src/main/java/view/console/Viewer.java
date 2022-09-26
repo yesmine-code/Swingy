@@ -14,16 +14,16 @@ import utility.FileManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.List;
 
 public class Viewer {
 
-    SwingyController swingy;
-    FileDao fileDao;
+    static SwingyController swingy;
+
 
     public Viewer(SwingyController swingy) throws FileNotFoundException {
         this.swingy = swingy;
-        this.fileDao = new FileDao();
 
     }
 
@@ -83,8 +83,8 @@ public class Viewer {
         Integer heroClass = getHeroClass();
         String heroName = getHeroName();
         Integer heroArtefact = getHeroArtefact();
-        fileDao.getHeroInfos(heroClass, heroName, ArtefactEnum.values()[heroArtefact].toString());
-        fileDao.saveHero();
+        Hero hero = swingy.createHero(HeroEnum.values()[heroClass].toString(), heroName, ArtefactEnum.values()[heroArtefact].getName());
+        swingy.saveHero(hero);
         swingy.initGame(heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
 
     }
@@ -93,17 +93,13 @@ public class Viewer {
         clearScreen();
         createBanner();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (FileManager.file.length() == 0) {
-            System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
-            System.out.println(Colors.RED + "PLEASE TYPE C TO CREATE Q TO QUIT");
-            String response = reader.readLine();
-            if (response.equalsIgnoreCase("Q"))
-                System.exit(0);
-            if (response.equalsIgnoreCase("c"))
-                createHero();
+        createNewHero();
+        List<Hero> heroes = getHeroes();
+        if (heroes.isEmpty()) {
+            FileManager.makeFileEmpty();
+            createNewHero();
             return;
         }
-        List<Hero> heroes = getHeroes();
         int heroNumber;
         while (true) {
             System.out.println("PLEASE SELECT YOUR HERO");
@@ -118,9 +114,23 @@ public class Viewer {
         swingy.initGame(heroes.get(heroNumber).getName(), heroes.get(heroNumber).getHeroClass(), heroes.get(heroNumber).getArtefact().toString());
     }
 
+    private void createNewHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while (FileManager.file.length() == 0 ) {
+            System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
+            System.out.println(Colors.RED + "PLEASE TYPE C TO CREATE Q TO QUIT");
+            String response = reader.readLine();
+            if (response.equalsIgnoreCase("Q"))
+                System.exit(0);
+            if (response.equalsIgnoreCase("c")) {
+                createHero();
+                return;
+            }
+        }
+    }
+
     private static List<Hero> getHeroes() throws FileNotFoundException, IOException, HeroClassNotFoundException, ArtefactNotFoundException {
-        FileDao fileDao = new FileDao();
-        List<Hero> heroes = fileDao.getAllHeroes();
+        List<Hero> heroes = swingy.getAllHeroes();
         for (int i = 0; i < heroes.size(); i++) {
             System.out.println(i + "- " + heroes.get(i).toString());
         }
@@ -129,7 +139,9 @@ public class Viewer {
 
     private Integer getHeroClass() throws IOException {
          for (int i = 0; i < HeroEnum.values().length; i++) {
-            System.out.println(Colors.YELLOW_BOLD_BRIGHT + i + "- " + HeroEnum.values()[i].toString());
+             System.out.print(Colors.YELLOW_BOLD_BRIGHT + i + "- " + HeroEnum.values()[i].toString() + "\t");
+             System.out.println("Attack = " + HeroEnum.values()[i].getAttack() + " Defence = " + HeroEnum.values()[i].getDefence() + " HitPoints = "
+             + HeroEnum.values()[i].getHitPoints());
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String response;
@@ -151,8 +163,8 @@ public class Viewer {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("PLEASE ENTER YOUR HERO NAME");
         String response = reader.readLine();
-        while (response.length() > 10) {
-            System.out.println(Colors.RED + "PLEASE ENTER A VALID HERO NAME NO MORE THAN 10 CHARACTERS");
+        while (response.length() > 10 || response.contains(" ")) {
+            System.out.println(Colors.RED + "PLEASE ENTER A VALID HERO NAME NO MORE THAN 10 CHARACTERS AND NO SPACE");
             response = reader.readLine();
             if (response.length() <= 10)
                 break;
@@ -161,13 +173,16 @@ public class Viewer {
     }
 
     private Integer getHeroArtefact() throws IOException {
+        clearScreen();
+        createBanner();
         int artefactNumber = 0;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             System.out.println("LAST BUT NOT LEAST PLEASE SELECT AN ARTEFACT");
-            List<String> artefacts = swingy.getArtefactService().getArtefactList();
-            for (int i = 0; i < artefacts.size(); i++)
-                System.out.println(i + "- " + artefacts.get(i));
+            for (int i = 0; i < ArtefactEnum.values().length; i++) {
+                System.out.print(Colors.YELLOW_BOLD_BRIGHT + i + "- " + ArtefactEnum.values()[i].toString() + "\t");
+                System.out.println("Power = " + ArtefactEnum.values()[i].getPower());
+            }
             String artefact = reader.readLine();
             try {
                 artefactNumber = Integer.parseInt(artefact);

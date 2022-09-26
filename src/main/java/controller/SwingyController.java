@@ -1,9 +1,21 @@
 package controller;
 
+import dao.FileDao;
+import dao.HeroDao;
 import exceptions.ArtefactNotFoundException;
+import exceptions.FileNotFoundException;
 import exceptions.HeroClassNotFoundException;
 import exceptions.VillainClassNotFoundException;
+import model.artefacts.Artefact;
+import model.artefacts.ArtefactEnum;
 import model.hero.Hero;
+import model.hero.HeroEnum;
+import view.console.Colors;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SwingyController {
     private HeroService heroService;
@@ -11,9 +23,11 @@ public class SwingyController {
     private VillainService villainService;
 
     private ArtefactService artefactService;
+    private HeroDao heroDao;
 
-    public SwingyController(){
-        heroService = new HeroService();
+    public SwingyController() throws FileNotFoundException {
+        heroDao = new FileDao();
+        heroService = new HeroService(heroDao);
         villainService = new VillainService();
         mapService = new MapService(villainService);
         artefactService = new ArtefactService();
@@ -26,19 +40,14 @@ public class SwingyController {
 
     }
 
-    public HeroService getHeroService() {
-        return heroService;
+    public Hero createHero(String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException {
+        return heroService.createHero(heroClass, name, artefact);
     }
 
-    public MapService getMapService() {
-        return mapService;
+    public List<Hero> getAllHeroes() throws HeroClassNotFoundException, FileNotFoundException, IOException, ArtefactNotFoundException {
+        return heroService.getAllHeroes();
     }
-
-    public VillainService getVillainService() {
-        return villainService;
-    }
-
-    public ArtefactService getArtefactService() {
-        return artefactService;
+    public void saveHero(Hero hero) throws FileNotFoundException {
+        heroService.saveHero(hero);
     }
 }
