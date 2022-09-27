@@ -19,6 +19,7 @@ public class MapService {
 
     public void initMap(Hero hero) throws VillainClassNotFoundException {
         this.hero = hero;
+        hero.computeLevel();
         mapSize = hero.computeMapSize();
         map = new Villain[mapSize][mapSize];
         Integer i = 0;

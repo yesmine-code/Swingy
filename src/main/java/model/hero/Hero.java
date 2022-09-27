@@ -3,6 +3,7 @@ package model.hero;
 import model.artefacts.Artefact;
 
 public abstract class Hero {
+    private Integer id;
     private String name;
     private final String heroClass;
     private Integer level;
@@ -14,10 +15,11 @@ public abstract class Hero {
 
     private Artefact artefact;
 
-    public Hero(String name, String heroClass, Integer level, Integer experience, Integer attack, Integer defence, Integer hitPoints, Artefact artefact) {
+    public Hero(Integer id, String name, String heroClass,
+                Integer experience, Integer attack, Integer defence, Integer hitPoints, Artefact artefact) {
+        this.id = id;
         this.name = name;
         this.heroClass = heroClass;
-        this.level = level;
         this.experience = experience;
         this.attack = attack;
         this.defence = defence;
@@ -99,7 +101,19 @@ public abstract class Hero {
         return ((this.level - 1) * 5 + 10 - (this.level % 2));
     }
 
+    public void computeLevel(){
+        level = 1;
+        while ((level * 1000) + (level - 1) * (level - 1) * 450 < experience)
+            level++;
+    }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     @Override
     public String toString() {

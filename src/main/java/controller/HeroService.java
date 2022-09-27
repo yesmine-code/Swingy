@@ -25,7 +25,7 @@ public class HeroService {
     }
 
     public Hero createHero(String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException {
-        return (HeroFactory.createHero(name, heroClass, artefactService.createArtefact(artefact)));
+        return (HeroFactory.createHero(null, name, heroClass, 1000, artefactService.createArtefact(artefact)));
     }
 
     public void addArtefactToHero(Hero hero, Artefact artefact) {
