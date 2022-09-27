@@ -1,7 +1,6 @@
 package view.console;
 
 import controller.SwingyController;
-import dao.FileDao;
 import exceptions.ArtefactNotFoundException;
 import exceptions.FileNotFoundException;
 import exceptions.HeroClassNotFoundException;
@@ -14,7 +13,6 @@ import utility.FileManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.List;
 
 public class Viewer {
@@ -83,10 +81,16 @@ public class Viewer {
         Integer heroClass = getHeroClass();
         String heroName = getHeroName();
         Integer heroArtefact = getHeroArtefact();
-        Hero hero = swingy.createHero(HeroEnum.values()[heroClass].toString(), heroName, ArtefactEnum.values()[heroArtefact].getName());
-        swingy.saveHero(hero);
         swingy.initGame(heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
+        swingy.saveHero(swingy.getHero());
+        printMap();
+    }
 
+    public void startGame() throws IOException {
+        while (!swingy.reachBorder()){
+            setMove();
+            printMap();
+        }
     }
 
     public void selectHero() throws FileNotFoundException, IOException, VillainClassNotFoundException, HeroClassNotFoundException, ArtefactNotFoundException {
@@ -112,11 +116,12 @@ public class Viewer {
             }
         }
         swingy.initGame(heroes.get(heroNumber).getName(), heroes.get(heroNumber).getHeroClass(), heroes.get(heroNumber).getArtefact().toString());
+        printMap();
     }
 
     private void createNewHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (FileManager.file.length() == 0 ) {
+        while (FileManager.file.length() == 0) {
             System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
             System.out.println(Colors.RED + "PLEASE TYPE C TO CREATE Q TO QUIT");
             String response = reader.readLine();
@@ -138,10 +143,10 @@ public class Viewer {
     }
 
     private Integer getHeroClass() throws IOException {
-         for (int i = 0; i < HeroEnum.values().length; i++) {
-             System.out.print(Colors.YELLOW_BOLD_BRIGHT + i + "- " + HeroEnum.values()[i].toString() + "\t");
-             System.out.println("Attack = " + HeroEnum.values()[i].getAttack() + " Defence = " + HeroEnum.values()[i].getDefence() + " HitPoints = "
-             + HeroEnum.values()[i].getHitPoints());
+        for (int i = 0; i < HeroEnum.values().length; i++) {
+            System.out.print(Colors.YELLOW_BOLD_BRIGHT + i + "- " + HeroEnum.values()[i].toString() + "\t");
+            System.out.println("Attack = " + HeroEnum.values()[i].getAttack() + " Defence = " + HeroEnum.values()[i].getDefence() + " HitPoints = "
+                    + HeroEnum.values()[i].getHitPoints());
         }
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String response;
@@ -193,4 +198,77 @@ public class Viewer {
         }
         return artefactNumber;
     }
+
+    private void printMap() {
+        clearScreen();
+        createBanner();
+        Integer mapSize = swingy.computeMapSize(swingy.getHero());
+        int i = 0;
+        int j;
+        System.out.print("\t\t   ");
+        for (i = 0; i < mapSize; i++)
+            System.out.print(i + 1 + "  ");
+        System.out.println();
+        i = 0;
+        while (i < mapSize) {
+            j = 0;
+            System.out.print("\t\t");
+            System.out.print(i + 1 + "  ");
+            while (j < mapSize) {
+                if (i == swingy.getHero().getPosition().getY() && j == swingy.getHero().getPosition().getX()) {
+                    System.out.print(Colors.RED + "*  " + Colors.YELLOW_BOLD_BRIGHT);
+                } else
+                    System.out.print("*  ");
+                if (j == mapSize - 1) {
+                    System.out.println();
+                }
+                j++;
+            }
+            i++;
+        }
+        System.out.println();
+        printInfos(swingy.getHero());
+    }
+
+    private void printInfos(Hero hero) {
+        System.out.println(Colors.RED + " *" + Colors.GREEN + " IS YOUR POSITION");
+        System.out.println(Colors.GREEN + "YOU MUST REACH ONE OF THE BORDERS OF THE MAP");
+        System.out.println(Colors.GREEN + "YOU CAN'T SEE THE VILLAINS BUT THEY CAN");
+        System.out.println(Colors.GREEN + "R=RIGHT L=LEFT U=UP D=DOWN");
+        System.out.println(Colors.GREEN + "PLEASE ENTER YOUR NEXT MOVE");
+        System.out.println(Colors.PURPLE + "HERO INFOS :");
+        System.out.println("-NAME: " + hero.getName() + " CLASS: " + hero.getHeroClass() + " LEVEL: " + hero.getLevel());
+        System.out.println("-ATTACK: " + hero.getAttack() + " DEFENCE: " + hero.getDefence()
+                + " HITPOINTS: " + hero.getHitPoints());
+        System.out.println("-ARTEFACT: " + hero.getArtefact().getName()
+                + " ATTACK: " + hero.getArtefact().getAttackAffect() + " DEFENCE: " + hero.getArtefact().getDefenceAffect()
+                + " HITPOINTS: " + hero.getArtefact().getHitPointsAffect());
+    }
+
+    private void setMove() throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String response = reader.readLine();
+        while (!"R".equalsIgnoreCase(response) && !"L".equalsIgnoreCase(response) &&
+                !"U".equalsIgnoreCase(response) && !"D".equalsIgnoreCase(response)) {
+            System.out.println(Colors.GREEN + "R=RIGHT L=LEFT U=UP D=DOWN");
+            System.out.println(Colors.GREEN + "PLEASE ENTER YOUR NEXT MOVE");
+            response = reader.readLine();
+        }
+        swingy.setNewPosition(response);
+    }
+
+    public void winingPrint() throws IOException {
+        System.out.println("CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS");
+        System.out.println("PLEASE ENTER S TO START A NEW GAME Q TO QUIT");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String response = reader.readLine();
+        while (!"s".equalsIgnoreCase(response) && !"Q".equalsIgnoreCase(response)) {
+            System.out.println("PLEASE ENTER S TO START A NEW GAME Q TO QUIT");
+            response = reader.readLine();
+            if ("Q".equalsIgnoreCase(response))
+                System.exit(0);
+        }
+    }
+
+
 }

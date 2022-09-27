@@ -8,6 +8,7 @@ import model.artefacts.Artefact;
 import model.hero.Hero;
 import model.hero.HeroEnum;
 import model.hero.HeroFactory;
+import model.hero.Position;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,4 +40,11 @@ public class HeroService {
     public void saveHero(Hero hero) throws FileNotFoundException {
         heroDao.saveHero(hero);
     }
+
+    public Integer computeMapSize(Hero hero){
+        return hero.computeMapSize();
+    }
+
+
+
 }

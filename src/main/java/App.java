@@ -11,12 +11,16 @@ public class App {
     public static void main(String args[]) throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
         SwingyController swing = new SwingyController();
         Viewer view = new Viewer(swing);
-        view.welcome();
-        String response = view.creatOrSelectHero();
-        if ("c".equalsIgnoreCase(response))
-            view.createHero();
-        else if ("s".equalsIgnoreCase(response)) {
-            view.selectHero();
+        while (true) {
+            view.welcome();
+            String response = view.creatOrSelectHero();
+            if ("c".equalsIgnoreCase(response))
+                view.createHero();
+            else if ("s".equalsIgnoreCase(response))
+                view.selectHero();
+            view.startGame();
+            if (swing.reachBorder())
+                view.winingPrint();
         }
     }
 }

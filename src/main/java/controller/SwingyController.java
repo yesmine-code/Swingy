@@ -6,16 +6,10 @@ import exceptions.ArtefactNotFoundException;
 import exceptions.FileNotFoundException;
 import exceptions.HeroClassNotFoundException;
 import exceptions.VillainClassNotFoundException;
-import model.artefacts.Artefact;
-import model.artefacts.ArtefactEnum;
 import model.hero.Hero;
-import model.hero.HeroEnum;
-import view.console.Colors;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class SwingyController {
     private HeroService heroService;
@@ -40,14 +34,28 @@ public class SwingyController {
 
     }
 
-    public Hero createHero(String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException {
-        return heroService.createHero(heroClass, name, artefact);
-    }
 
     public List<Hero> getAllHeroes() throws HeroClassNotFoundException, FileNotFoundException, IOException, ArtefactNotFoundException {
         return heroService.getAllHeroes();
     }
+
     public void saveHero(Hero hero) throws FileNotFoundException {
         heroService.saveHero(hero);
+    }
+
+    public Integer computeMapSize(Hero hero) {
+        return heroService.computeMapSize(hero);
+    }
+
+    public void setNewPosition(String response){
+        mapService.setNewPosition(response);
+    }
+
+    public boolean reachBorder(){
+        return mapService.reachBorder();
+    }
+
+    public Hero getHero(){
+        return mapService.getHero();
     }
 }
