@@ -1,9 +1,9 @@
 package model.villain;
 
 public enum VillainEnum {
-    SQUELETTES("Squelettes", 800),
-    COCHONS("cochons", 900),
-    BARBARES("Barbares", 1000);
+    SQUELETTES("Squelettes", 400),
+    COCHONS("cochons", 500),
+    BARBARES("Barbares", 550);
 
     private String name;
     private Integer power;

@@ -7,6 +7,8 @@ import exceptions.FileNotFoundException;
 import exceptions.HeroClassNotFoundException;
 import exceptions.VillainClassNotFoundException;
 import model.hero.Hero;
+import model.hero.Position;
+import model.villain.Villain;
 
 import java.io.IOException;
 import java.util.List;
@@ -68,6 +70,21 @@ public class SwingyController {
     }
     public void makeEmpty() throws java.io.FileNotFoundException {
         heroDao.makeEmpty();
+    }
+    public Villain villainExist(){
+        return mapService.villainExist();
+    }
+
+    public boolean heroWinsFight(Villain villain){
+        return mapService.heroWinsFight(villain);
+    }
+
+    public boolean runnigSimulation(){
+        return mapService.runningSimulator();
+    }
+
+    public void returnToPreviousPosition(){
+        mapService.getHero().setPosition(getHero().getPreviousPosition());
     }
 
 }

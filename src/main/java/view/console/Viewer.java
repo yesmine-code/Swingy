@@ -269,8 +269,11 @@ public class Viewer {
         }
     }
 
-    public void villainMeeting(Villain villain) throws IOException {
+
+
+    public String villainMeeting(Villain villain) throws IOException, InterruptedException {
         System.out.println(Colors.RED + "UNFORTUNATELY YOU JUST MET ONE OF THE VILLAINS");
+        Thread.sleep(1000);
         System.out.println(Colors.BLUE + "OH MY GOOOOD!!, ITS ONE OF THE " + villain.getVillainClass() + " HIS POWER= " + villain.getPower());
         System.out.println("DO YOU WANT TO FIGHT OR TO RUN");
         System.out.println("PLEASE TYPE F TO FIGHT R TO RUN");
@@ -280,14 +283,30 @@ public class Viewer {
             System.out.println("PLEASE TYPE F TO FIGHT R TO RUN");
             response = reader.readLine();
         }
-        if ("F".equalsIgnoreCase(response))
-            fightScenario();
-
-
+        return response;
     }
 
-    public void fightScenario(){
+    public void fightScenario() throws IOException, InterruptedException {
+        Villain villain = swingy.villainExist();
+        if (villain != null) {
+            String response = villainMeeting(villain);
+            if ("R".equalsIgnoreCase(response)) {
+                if (swingy.runnigSimulation()) {
+                    swingy.returnToPreviousPosition();
+                }
+                else {
+                    //too late you must fight
+                }
 
+            } else {
+                if (swingy.heroWinsFight(villain)) {
+                    //getweapon and set xp
+                } else{
+                    //loose exit
+
+                }
+            }
+        }
     }
 
 

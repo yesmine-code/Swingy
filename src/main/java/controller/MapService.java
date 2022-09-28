@@ -43,14 +43,22 @@ public class MapService {
     }
 
     public void setNewPosition(String response) {
-        if ("R".equalsIgnoreCase(response) && hero.getPosition().getX() + 1 < mapSize)
+        if ("R".equalsIgnoreCase(response) && hero.getPosition().getX() + 1 < mapSize) {
+            hero.setPreviousPosition(hero.getPosition());
             hero.getPosition().setX(hero.getPosition().getX() + 1);
-        else if ("L".equalsIgnoreCase(response) && hero.getPosition().getX() - 1 >= 0)
+        }
+        else if ("L".equalsIgnoreCase(response) && hero.getPosition().getX() - 1 >= 0) {
+            hero.setPreviousPosition(hero.getPosition());
             hero.getPosition().setX(hero.getPosition().getX() - 1);
-        else if ("U".equalsIgnoreCase(response) && hero.getPosition().getY() - 1 >= 0)
+        }
+        else if ("U".equalsIgnoreCase(response) && hero.getPosition().getY() - 1 >= 0) {
+            hero.setPreviousPosition(hero.getPosition());
             hero.getPosition().setY(hero.getPosition().getY() - 1);
-        else if ("D".equalsIgnoreCase(response) && hero.getPosition().getY() + 1 < mapSize)
+        }
+        else if ("D".equalsIgnoreCase(response) && hero.getPosition().getY() + 1 < mapSize) {
+            hero.setPreviousPosition(hero.getPosition());
             hero.getPosition().setY(hero.getPosition().getY() + 1);
+        }
     }
     public boolean reachBorder(){
         if (hero.getPosition().getX() == 0 || hero.getPosition().getY() == 0 ||
@@ -62,4 +70,26 @@ public class MapService {
     public Hero getHero() {
         return hero;
     }
+    public Villain villainExist(){
+        return map[hero.getPosition().getY()][hero.getPosition().getX()];
+    }
+
+    public boolean heroWinsFight(Villain villain){
+        Integer heroPower = hero.getAttack() * 2 + hero.getDefence()  * 3 + hero.getHitPoints() * 2 +
+                hero.getArtefact().getHitPointsAffect()+ hero.getArtefact().getDefenceAffect() + hero.getArtefact().getAttackAffect();
+        Integer villainPower = villain.getPower() * 7 + villain.getArtefact().getDefenceAffect() +
+                villain.getArtefact().getAttackAffect() + villain.getArtefact().getHitPointsAffect();
+        Random rand = new Random();
+        double r1 = rand.nextDouble() + 1;
+        double r2 = rand.nextDouble() + 1;
+        return  (heroPower * r1 > villainPower * r2);
+    }
+
+    public boolean runningSimulator(){
+        Random rand = new Random();
+        double r1 = rand.nextDouble();
+        return r1 < 0.5;
+
+    }
+
 }

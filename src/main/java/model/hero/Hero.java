@@ -13,7 +13,11 @@ public abstract class Hero {
     private  Integer hitPoints;
     private Position position;
 
+    private Position previousPosition;
+
+
     private Artefact artefact;
+
 
     public Hero(Integer id, String name, String heroClass,
                 Integer experience, Integer attack, Integer defence, Integer hitPoints, Artefact artefact) {
@@ -109,6 +113,14 @@ public abstract class Hero {
 
     public Integer getId() {
         return id;
+    }
+
+    public Position getPreviousPosition() {
+        return previousPosition;
+    }
+
+    public void setPreviousPosition(Position previousPosition) {
+        this.previousPosition = previousPosition;
     }
 
     public void setId(Integer id) {
