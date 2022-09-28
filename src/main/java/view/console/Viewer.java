@@ -8,8 +8,7 @@ import exceptions.VillainClassNotFoundException;
 import model.artefacts.ArtefactEnum;
 import model.hero.Hero;
 import model.hero.HeroEnum;
-import utility.FileManager;
-
+import model.villain.Villain;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -81,7 +80,7 @@ public class Viewer {
         Integer heroClass = getHeroClass();
         String heroName = getHeroName();
         Integer heroArtefact = getHeroArtefact();
-        swingy.initGame(heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
+        swingy.initGame( -1, heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
         swingy.saveHero(swingy.getHero());
         printMap();
     }
@@ -97,10 +96,9 @@ public class Viewer {
         clearScreen();
         createBanner();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        createNewHero();
         List<Hero> heroes = getHeroes();
         if (heroes.isEmpty()) {
-            FileManager.makeFileEmpty();
+            swingy.makeEmpty();
             createNewHero();
             return;
         }
@@ -115,13 +113,13 @@ public class Viewer {
             } catch (NumberFormatException e) {
             }
         }
-        swingy.initGame(heroes.get(heroNumber).getName(), heroes.get(heroNumber).getHeroClass(), heroes.get(heroNumber).getArtefact().toString());
+        swingy.initGame(heroes.get(heroNumber).getId(), heroes.get(heroNumber).getName(), heroes.get(heroNumber).getHeroClass(), heroes.get(heroNumber).getArtefact().toString());
         printMap();
     }
 
     private void createNewHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (FileManager.file.length() == 0) {
+        while (swingy.previousHeroExist()) {
             System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
             System.out.println(Colors.RED + "PLEASE TYPE C TO CREATE Q TO QUIT");
             String response = reader.readLine();
@@ -269,6 +267,28 @@ public class Viewer {
                 System.exit(0);
         }
     }
+
+    public void villainMeeting(Villain villain) throws IOException {
+        System.out.println(Colors.RED + "UNFORTUNATELY YOU JUST MET ONE OF THE VILLAINS");
+        System.out.println(Colors.BLUE + "OH MY GOOOOD!!, ITS ONE OF THE " + villain.getVillainClass() + " HIS POWER= " + villain.getPower());
+        System.out.println("DO YOU WANT TO FIGHT OR TO RUN");
+        System.out.println("PLEASE TYPE F TO FIGHT R TO RUN");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String response = reader.readLine();
+        while (!"R".equalsIgnoreCase(response) && !"F".equalsIgnoreCase(response)){
+            System.out.println("PLEASE TYPE F TO FIGHT R TO RUN");
+            response = reader.readLine();
+        }
+        if ("F".equalsIgnoreCase(response))
+            fightScenario();
+
+
+    }
+
+    public void fightScenario(){
+
+    }
+
 
 
 }

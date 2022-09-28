@@ -24,8 +24,12 @@ public class HeroService {
         this.heroDao = heroDao;
     }
 
-    public Hero createHero(String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException {
-        return (HeroFactory.createHero(null, name, heroClass, 1000, artefactService.createArtefact(artefact)));
+    public Hero createHero(Integer id, String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException, FileNotFoundException, IOException {
+        if (id == -1)
+            return (HeroFactory.createHero(heroDao.getNextId(), name, heroClass, 1000, artefactService.createArtefact(artefact)));
+        else
+            return (HeroFactory.createHero(id, name, heroClass, 1000, artefactService.createArtefact(artefact)));
+
     }
 
     public void addArtefactToHero(Hero hero, Artefact artefact) {

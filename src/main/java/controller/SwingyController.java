@@ -27,8 +27,8 @@ public class SwingyController {
         artefactService = new ArtefactService();
     }
 
-    public void initGame(String name, String heroClass, String artefact) throws HeroClassNotFoundException, VillainClassNotFoundException, ArtefactNotFoundException {
-        Hero hero = heroService.createHero(heroClass, name, artefact);
+    public void initGame(Integer id, String name, String heroClass, String artefact) throws HeroClassNotFoundException, VillainClassNotFoundException, ArtefactNotFoundException, FileNotFoundException, IOException {
+        Hero hero = heroService.createHero(id, heroClass, name, artefact);
         mapService.initMap(hero);
         mapService.putHeroInitialPosition();
 
@@ -58,4 +58,16 @@ public class SwingyController {
     public Hero getHero(){
         return mapService.getHero();
     }
+
+    public void updateHero(Hero hero) throws FileNotFoundException, IOException {
+        heroDao.updateHero(hero);
+    }
+
+    public boolean previousHeroExist(){
+        return heroDao.previousHeroExist();
+    }
+    public void makeEmpty() throws java.io.FileNotFoundException {
+        heroDao.makeEmpty();
+    }
+
 }
