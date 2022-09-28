@@ -119,8 +119,9 @@ public class Viewer {
 
     private void createNewHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        while (swingy.previousHeroExist()) {
+        if(swingy.previousHeroExist())
             System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
+        while (true) {
             System.out.println(Colors.RED + "PLEASE TYPE C TO CREATE Q TO QUIT");
             String response = reader.readLine();
             if (response.equalsIgnoreCase("Q"))
