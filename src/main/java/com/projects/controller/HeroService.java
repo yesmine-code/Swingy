@@ -20,11 +20,11 @@ public class HeroService {
         this.heroDao = heroDao;
     }
 
-    public Hero createHero(Integer id, String heroClass, String name, String artefact) throws HeroClassNotFoundException, ArtefactNotFoundException, FileNotFoundException, IOException {
-        if (id == -1)
-            return (HeroFactory.createHero(heroDao.getNextId(), name, heroClass, 1000, artefactService.createArtefact(artefact)));
-        else
-            return (HeroFactory.createHero(id, name, heroClass, 1000, artefactService.createArtefact(artefact)));
+    public Hero createHero(Integer id, String heroClass, String name, String artefact, int xp) throws HeroClassNotFoundException, ArtefactNotFoundException, FileNotFoundException, IOException {
+        if (id == -1) //create new hero
+            return (HeroFactory.createHero(heroDao.getNextId(), name, heroClass, xp, artefactService.createArtefact(artefact)));
+        else //select
+            return (HeroFactory.createHero(id, name, heroClass, xp, artefactService.createArtefact(artefact)));
 
     }
 

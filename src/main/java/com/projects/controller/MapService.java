@@ -52,22 +52,18 @@ public class MapService {
     }
 
     public void setNewPosition(String response) {
-        if ("R".equalsIgnoreCase(response) && hero.getPosition().getX() + 1 < mapSize) {
-            hero.setPreviousPosition(hero.getPosition());
+        Position previous = new Position();
+        previous.setX(hero.getPosition().getX());
+        previous.setY(hero.getPosition().getY());
+        hero.setPreviousPosition(previous);
+        if ("R".equalsIgnoreCase(response) && hero.getPosition().getX() + 1 < mapSize)
             hero.getPosition().setX(hero.getPosition().getX() + 1);
-        }
-        else if ("L".equalsIgnoreCase(response) && hero.getPosition().getX() - 1 >= 0) {
-            hero.setPreviousPosition(hero.getPosition());
+        else if ("L".equalsIgnoreCase(response) && hero.getPosition().getX() - 1 >= 0)
             hero.getPosition().setX(hero.getPosition().getX() - 1);
-        }
-        else if ("U".equalsIgnoreCase(response) && hero.getPosition().getY() - 1 >= 0) {
-            hero.setPreviousPosition(hero.getPosition());
+        else if ("U".equalsIgnoreCase(response) && hero.getPosition().getY() - 1 >= 0)
             hero.getPosition().setY(hero.getPosition().getY() - 1);
-        }
-        else if ("D".equalsIgnoreCase(response) && hero.getPosition().getY() + 1 < mapSize) {
-            hero.setPreviousPosition(hero.getPosition());
+        else if ("D".equalsIgnoreCase(response) && hero.getPosition().getY() + 1 < mapSize)
             hero.getPosition().setY(hero.getPosition().getY() + 1);
-        }
     }
     public boolean reachBorder(){
         if (hero.getPosition().getX() == 0 || hero.getPosition().getY() == 0 ||
@@ -106,6 +102,6 @@ public class MapService {
     }
 
     public void setNewXp(Villain villain){
-        hero.setExperience(hero.getExperience() + (villain.getPower() * 4));
+        hero.setExperience(hero.getExperience() + (villain.getPower() * 2));
     }
 }

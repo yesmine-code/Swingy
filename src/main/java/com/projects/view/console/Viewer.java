@@ -81,7 +81,7 @@ public class Viewer {
         Integer heroClass = getHeroClass();
         String heroName = getHeroName();
         Integer heroArtefact = getHeroArtefact();
-        swingy.initGame(-1, heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
+        swingy.initGame(-1, heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString(), 1000);
         swingy.saveHero(swingy.getHero());
         printMap();
     }
@@ -121,7 +121,7 @@ public class Viewer {
             } catch (NumberFormatException e) {
             }
         }
-        swingy.initGame(heroes.get(heroNumber).getId(), heroes.get(heroNumber).getName(), heroes.get(heroNumber).getHeroClass(), heroes.get(heroNumber).getArtefact().toString());
+        swingy.initGame(heroes.get(heroNumber).getId(), heroes.get(heroNumber).getName(), heroes.get(heroNumber).getHeroClass(), heroes.get(heroNumber).getArtefact().toString(), heroes.get(heroNumber).getExperience());
         printMap();
     }
 
@@ -214,18 +214,18 @@ public class Viewer {
         int j;
         System.out.print("\t\t   ");
         for (i = 0; i < mapSize; i++)
-            System.out.print(i + 1 + "  ");
+            System.out.print(String.format("%02d", i + 1) + "  ");
         System.out.println();
         i = 0;
         while (i < mapSize) {
             j = 0;
             System.out.print("\t\t");
-            System.out.print(i + 1 + "  ");
+            System.out.print(String.format("%02d", i + 1) + "  ");
             while (j < mapSize) {
                 if (i == swingy.getHero().getPosition().getY() && j == swingy.getHero().getPosition().getX()) {
-                    System.out.print(Colors.RED + "*  " + Colors.YELLOW_BOLD_BRIGHT);
+                    System.out.print(Colors.RED + "*   " + Colors.YELLOW_BOLD_BRIGHT);
                 } else
-                    System.out.print("*  ");
+                    System.out.print("*   ");
                 if (j == mapSize - 1) {
                     System.out.println();
                 }
@@ -274,7 +274,8 @@ public class Viewer {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             String response;
-            System.out.println("PLEASE ENTER " + Colors.RED + "S " + Colors.GREEN + "TO START A NEW GAME" + Colors.RED + " Q " + Colors.GREEN + "TO QUIT");
+            System.out.println("PLEASE ENTER " + Colors.RED + "S " + Colors.GREEN +
+                    "TO START A NEW GAME" + Colors.RED + " Q " + Colors.GREEN + "TO QUIT");
             response = reader.readLine();
             if ("Q".equalsIgnoreCase(response))
                 System.exit(0);
@@ -346,8 +347,8 @@ public class Viewer {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String response = null;
         System.out.println("CONGRATULATIONS YOU JUST WON THIS FIGHT");
-        System.out.println("YOU JUST WON " + villain.getPower() * 4 + " XP");
         swingy.setNewXp(villain);
+        System.out.println("YOUR NEW XP = " + swingy.getHero().getExperience());
         System.out.println(Colors.BLUE + "VILLAIN ARTEFACT IS " + villain.getArtefact().getName().toUpperCase());
         System.out.println("DO YOU WANT TO TAKE IT ? IF YOU DO YOU WILL DROP YOURS");
         System.out.println("PLEASE MAKE SURE YOU KEEP THE RIGHT ONE");
