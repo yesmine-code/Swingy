@@ -25,7 +25,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.projects.App</mainClass>
+                            <mainClass>org.yesmine.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
