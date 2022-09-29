@@ -9,10 +9,12 @@ import model.artefacts.ArtefactEnum;
 import model.hero.Hero;
 import model.hero.HeroEnum;
 import model.villain.Villain;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Locale;
 
 public class Viewer {
 
@@ -80,16 +82,20 @@ public class Viewer {
         Integer heroClass = getHeroClass();
         String heroName = getHeroName();
         Integer heroArtefact = getHeroArtefact();
-        swingy.initGame( -1, heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
+        swingy.initGame(-1, heroName, HeroEnum.values()[heroClass].toString(), ArtefactEnum.values()[heroArtefact].toString());
         swingy.saveHero(swingy.getHero());
         printMap();
     }
 
-    public void startGame() throws IOException {
-        while (!swingy.reachBorder()){
+    public void startGame() throws IOException, InterruptedException, FileNotFoundException {
+        while (!swingy.reachBorder()) {
             setMove();
             printMap();
+            if (!fightScenario())
+                break;
         }
+        winingPrint();
+        swingy.updateHero();
     }
 
     public void selectHero() throws FileNotFoundException, IOException, VillainClassNotFoundException, HeroClassNotFoundException, ArtefactNotFoundException {
@@ -119,7 +125,7 @@ public class Viewer {
 
     private void createNewHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        if(swingy.previousHeroExist())
+        if (swingy.previousHeroExist())
             System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
         while (true) {
             System.out.println(Colors.RED + "PLEASE TYPE C TO CREATE Q TO QUIT");
@@ -231,8 +237,8 @@ public class Viewer {
 
     private void printInfos(Hero hero) {
         System.out.println(Colors.RED + " *" + Colors.GREEN + " IS YOUR POSITION");
-        System.out.println(Colors.GREEN + "YOU MUST REACH ONE OF THE BORDERS OF THE MAP");
-        System.out.println(Colors.GREEN + "YOU CAN'T SEE THE VILLAINS BUT THEY CAN");
+        System.out.println(Colors.RED_BOLD_BRIGHT + "YOU MUST REACH ONE OF THE BORDERS OF THE MAP");
+        System.out.println(Colors.RED_BOLD_BRIGHT + "YOU CAN'T SEE THE VILLAINS BUT THEY CAN");
         System.out.println(Colors.GREEN + "R=RIGHT L=LEFT U=UP D=DOWN");
         System.out.println(Colors.GREEN + "PLEASE ENTER YOUR NEXT MOVE");
         System.out.println(Colors.PURPLE + "HERO INFOS :");
@@ -257,58 +263,115 @@ public class Viewer {
     }
 
     public void winingPrint() throws IOException {
-        System.out.println("CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS");
-        System.out.println("PLEASE ENTER S TO START A NEW GAME Q TO QUIT");
+        System.out.println(Colors.GREEN + "CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS");
+        restartGame();
+    }
+
+    private void restartGame() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String response = reader.readLine();
-        while (!"s".equalsIgnoreCase(response) && !"Q".equalsIgnoreCase(response)) {
-            System.out.println("PLEASE ENTER S TO START A NEW GAME Q TO QUIT");
+        while (true) {
+            String response;
+            System.out.println("PLEASE ENTER " + Colors.RED + "S " + Colors.GREEN + "TO START A NEW GAME" + Colors.RED + " Q " + Colors.GREEN + "TO QUIT");
             response = reader.readLine();
             if ("Q".equalsIgnoreCase(response))
                 System.exit(0);
+            if ("S".equalsIgnoreCase(response))
+                break;
         }
     }
 
 
-
-    public String villainMeeting(Villain villain) throws IOException, InterruptedException {
+    private String villainMeeting(Villain villain) throws IOException, InterruptedException {
+        clearScreen();
+        createBanner();
         System.out.println(Colors.RED + "UNFORTUNATELY YOU JUST MET ONE OF THE VILLAINS");
         Thread.sleep(1000);
-        System.out.println(Colors.BLUE + "OH MY GOOOOD!!, ITS ONE OF THE " + villain.getVillainClass() + " HIS POWER= " + villain.getPower());
+        System.out.println(Colors.BLUE + "OH MY GOOOOD!!, ITS ONE OF THE " + villain.getVillainClass().toUpperCase()
+                + " HIS POWER= " + villain.getPower() + " HIS ARTEFACT=" + villain.getArtefact().getName());
         System.out.println("DO YOU WANT TO FIGHT OR TO RUN");
-        System.out.println("PLEASE TYPE F TO FIGHT R TO RUN");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String response = reader.readLine();
-        while (!"R".equalsIgnoreCase(response) && !"F".equalsIgnoreCase(response)){
-            System.out.println("PLEASE TYPE F TO FIGHT R TO RUN");
+        String response;
+        while (true) {
+            System.out.println("PLEASE TYPE " + Colors.RED + "F " + Colors.BLUE + "TO FIGHT " + Colors.RED + "R " + Colors.BLUE + "TO RUN");
             response = reader.readLine();
+            if ("R".equalsIgnoreCase(response) || "F".equalsIgnoreCase(response))
+                break;
         }
         return response;
     }
 
-    public void fightScenario() throws IOException, InterruptedException {
+    public boolean fightScenario() throws IOException, InterruptedException {
         Villain villain = swingy.villainExist();
         if (villain != null) {
             String response = villainMeeting(villain);
             if ("R".equalsIgnoreCase(response)) {
                 if (swingy.runnigSimulation()) {
                     swingy.returnToPreviousPosition();
-                }
-                else {
-                    //too late you must fight
-                }
-
-            } else {
-                if (swingy.heroWinsFight(villain)) {
-                    //getweapon and set xp
-                } else{
-                    //loose exit
-
+                    printMap();
+                    System.out.println("YOU JUST RETURNED TO PREVIOUS POSITION PLEASE SET YOUR NEXT MOVE");
+                    return true;
+                } else {
+                    System.out.println("TOO LATE BODY LUCK ISN'T BY YOUR SIDE THIS TIME");
+                    Thread.sleep(1000);
+                    System.out.println("YOU MUST FIGHT");
                 }
             }
+            fightingPrint();
+            if (swingy.heroWinsFight(villain)) {
+                getVillainArtefact(villain);
+                printMap();
+                System.out.println("PLEASE SET YOUR NEXT MOVE");
+                return true;
+            }
+            loosingPrint();
+            return false;
+        }
+        return true;
+    }
+
+    public void loosingPrint() throws IOException, InterruptedException {
+        clearScreen();
+        createBanner();
+        System.out.println(Colors.RED_BOLD_BRIGHT + "GAME OVER");
+        Thread.sleep(1000);
+        System.out.println(Colors.GREEN + "GOOD LUCK FOR THE NEXT TIME");
+        Thread.sleep(1000);
+        System.out.println("PLEASE ENTER " + Colors.RED + "S " + Colors.GREEN + "TO START A NEW GAME" + Colors.RED + " Q " + Colors.GREEN + "TO QUIT");
+        restartGame();
+    }
+
+    private void getVillainArtefact(Villain villain) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String response = null;
+        System.out.println("CONGRATULATIONS YOU JUST WON THIS FIGHT");
+        System.out.println("YOU JUST WON " + villain.getPower() + " XP");
+        swingy.setNewXp(villain);
+        System.out.println("VILLAIN ARTEFACT IS " + villain.getArtefact().toString());
+        System.out.println("DO YOU WANT TO TAKE IT ? IF YOU DO YOU WILL DROP YOURS");
+        System.out.println("PLEASE MAKE SURE YOU KEEP THE RIGHT ONE");
+        while (!"T".equalsIgnoreCase(response) && !"L".equalsIgnoreCase(response)) {
+            System.out.println("PLEASE PRESS " + Colors.RED + "T " + Colors.GREEN + "TO TAKE THE ARTEFACT " + Colors.RED + "L " + Colors.GREEN + "TO LEAVE IT");
+            response = reader.readLine();
+            if ("T".equalsIgnoreCase(response))
+                swingy.changeArtefact(villain);
         }
     }
 
+    public void fightingPrint() throws InterruptedException {
+        clearScreen();
+        createBanner();
+        Thread.sleep(1000);
+        System.out.println(Colors.RED + "-COME ON DO YOU FEAR ME !!");
+        Thread.sleep(1000);
+        System.out.println("-NO I AM JUST PRAYING FOR YOU I AM GOING TO KILL YOU");
+        Thread.sleep(1000);
+        System.out.println("-AOUUUUCH");
+        Thread.sleep(1000);
+        System.out.println("-OH MY GOD THAT HURTS");
+        Thread.sleep(1000);
+        System.out.println("-AYYYYY");
+        Thread.sleep(1000);
+    }
 
 
 }

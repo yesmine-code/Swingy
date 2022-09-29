@@ -61,7 +61,8 @@ public class SwingyController {
         return mapService.getHero();
     }
 
-    public void updateHero(Hero hero) throws FileNotFoundException, IOException {
+    public void updateHero() throws FileNotFoundException, IOException {
+        Hero hero = mapService.getHero();
         heroDao.updateHero(hero);
     }
 
@@ -86,5 +87,14 @@ public class SwingyController {
     public void returnToPreviousPosition(){
         mapService.getHero().setPosition(getHero().getPreviousPosition());
     }
+
+    public void  changeArtefact(Villain villain){
+        mapService.changeArtefact(villain);
+    }
+
+    public void setNewXp(Villain villain){
+        mapService.setNewXp(villain);
+    }
+
 
 }

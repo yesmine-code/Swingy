@@ -1,6 +1,11 @@
 package controller;
 
+import exceptions.ArtefactNotFoundException;
 import exceptions.VillainClassNotFoundException;
+import model.artefacts.Armor;
+import model.artefacts.Artefact;
+import model.artefacts.ArtefactEnum;
+import model.artefacts.ArtefactFactory;
 import model.hero.Hero;
 import model.hero.Position;
 import model.villain.Villain;
@@ -17,7 +22,7 @@ public class MapService {
         this.villainService = villainService;
     }
 
-    public void initMap(Hero hero) throws VillainClassNotFoundException {
+    public void initMap(Hero hero) throws VillainClassNotFoundException, ArtefactNotFoundException {
         this.hero = hero;
         hero.computeLevel();
         mapSize = hero.computeMapSize();
@@ -26,9 +31,14 @@ public class MapService {
         Integer j = 0;
         Random random = new Random();
         while (i < mapSize) {
+            j = 0;
             while (j < mapSize) {
-                if ((j != mapSize / 2 || i != mapSize / 2) && random.nextBoolean())
+                if (!(j == mapSize / 2 && i == mapSize / 2) && random.nextDouble() > 0.4) {
                     map[i][j] = villainService.createVillain(villainService.getRandomVillainName());
+                    int r = new Random().nextInt(9);
+                    Artefact art = ArtefactFactory.getArtefact(ArtefactEnum.values()[r].getName());
+                    villainService.addArtefactToVillain(map[i][j], art);
+                }
                 j++;
             }
             i++;
@@ -92,4 +102,11 @@ public class MapService {
 
     }
 
+    public void  changeArtefact(Villain villain){
+        hero.setArtefact(villain.getArtefact());
+    }
+
+    public void setNewXp(Villain villain){
+        hero.setExperience(hero.getExperience() + villain.getPower());
+    }
 }

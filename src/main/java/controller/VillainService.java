@@ -19,7 +19,7 @@ public class VillainService {
 
     public String getRandomVillainName(){
         Random rand = new Random();
-        Integer i = rand.nextInt(2);
+        Integer i = rand.nextInt(3);
         return VillainEnum.values()[i].getName();
     }
 }
