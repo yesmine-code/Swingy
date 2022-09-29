@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="org.yesmine.AppTest" time="0.002" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="org.yesmine.AppTest" time="0.004" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2022.2.1"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
@@ -44,7 +44,7 @@
     <property name="java.class.path" value="/media/yesmine/données/42/ideaIU-2022.2.1/idea-IU-222.3739.54/plugins/maven/lib/maven3/boot/plexus-classworlds-2.6.0.jar:/media/yesmine/données/42/ideaIU-2022.2.1/idea-IU-222.3739.54/plugins/maven/lib/maven3/boot/plexus-classworlds.license"/>
     <property name="java.vm.specification.version" value="11"/>
     <property name="sun.arch.data.model" value="64"/>
-    <property name="sun.java.command" value="org.codehaus.classworlds.Launcher -Didea.version=2022.2.1 install"/>
+    <property name="sun.java.command" value="org.codehaus.classworlds.Launcher -Didea.version=2022.2.1 clean install"/>
     <property name="java.home" value="/usr/lib/jvm/java-11-openjdk-amd64"/>
     <property name="user.language" value="en"/>
     <property name="java.specification.vendor" value="Oracle Corporation"/>
@@ -62,5 +62,5 @@
     <property name="sun.desktop" value="gnome"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase classname="org.yesmine.AppTest" name="testApp" time="0.002"/>
+  <testcase classname="org.yesmine.AppTest" name="testApp" time="0.004"/>
 </testsuite>
