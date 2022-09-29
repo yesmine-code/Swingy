@@ -14,7 +14,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Locale;
 
 public class Viewer {
 
@@ -91,7 +90,7 @@ public class Viewer {
         while (!swingy.reachBorder()) {
             setMove();
             printMap();
-            if (!fightScenario())
+            if (!fightScenario() || swingy.reachBorder())
                 break;
         }
         winingPrint();
@@ -262,12 +261,13 @@ public class Viewer {
         swingy.setNewPosition(response);
     }
 
-    public void winingPrint() throws IOException {
+    public void winingPrint() throws IOException, FileNotFoundException {
         System.out.println(Colors.GREEN + "CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS");
         restartGame();
     }
 
-    private void restartGame() throws IOException {
+    private void restartGame() throws IOException, FileNotFoundException {
+        swingy.updateHero();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
             String response;
@@ -287,7 +287,7 @@ public class Viewer {
         System.out.println(Colors.RED + "UNFORTUNATELY YOU JUST MET ONE OF THE VILLAINS");
         Thread.sleep(1000);
         System.out.println(Colors.BLUE + "OH MY GOOOOD!!, ITS ONE OF THE " + villain.getVillainClass().toUpperCase()
-                + " HIS POWER= " + villain.getPower() + " HIS ARTEFACT=" + villain.getArtefact().getName());
+                + " HIS POWER= " + villain.getPower() + " HIS ARTEFACT=" + villain.getArtefact().getName().toUpperCase());
         System.out.println("DO YOU WANT TO FIGHT OR TO RUN");
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String response;
@@ -300,7 +300,7 @@ public class Viewer {
         return response;
     }
 
-    public boolean fightScenario() throws IOException, InterruptedException {
+    public boolean fightScenario() throws IOException, InterruptedException, FileNotFoundException {
         Villain villain = swingy.villainExist();
         if (villain != null) {
             String response = villainMeeting(villain);
@@ -308,7 +308,7 @@ public class Viewer {
                 if (swingy.runnigSimulation()) {
                     swingy.returnToPreviousPosition();
                     printMap();
-                    System.out.println("YOU JUST RETURNED TO PREVIOUS POSITION PLEASE SET YOUR NEXT MOVE");
+                    System.out.println(Colors.RED + "YOU JUST RETURNED TO PREVIOUS POSITION PLEASE SET YOUR NEXT MOVE");
                     return true;
                 } else {
                     System.out.println("TOO LATE BODY LUCK ISN'T BY YOUR SIDE THIS TIME");
@@ -329,14 +329,13 @@ public class Viewer {
         return true;
     }
 
-    public void loosingPrint() throws IOException, InterruptedException {
+    public void loosingPrint() throws IOException, InterruptedException, FileNotFoundException {
         clearScreen();
         createBanner();
         System.out.println(Colors.RED_BOLD_BRIGHT + "GAME OVER");
         Thread.sleep(1000);
         System.out.println(Colors.GREEN + "GOOD LUCK FOR THE NEXT TIME");
         Thread.sleep(1000);
-        System.out.println("PLEASE ENTER " + Colors.RED + "S " + Colors.GREEN + "TO START A NEW GAME" + Colors.RED + " Q " + Colors.GREEN + "TO QUIT");
         restartGame();
     }
 
@@ -346,7 +345,7 @@ public class Viewer {
         System.out.println("CONGRATULATIONS YOU JUST WON THIS FIGHT");
         System.out.println("YOU JUST WON " + villain.getPower() + " XP");
         swingy.setNewXp(villain);
-        System.out.println("VILLAIN ARTEFACT IS " + villain.getArtefact().toString());
+        System.out.println("VILLAIN ARTEFACT IS " + villain.getArtefact().toString().toUpperCase());
         System.out.println("DO YOU WANT TO TAKE IT ? IF YOU DO YOU WILL DROP YOURS");
         System.out.println("PLEASE MAKE SURE YOU KEEP THE RIGHT ONE");
         while (!"T".equalsIgnoreCase(response) && !"L".equalsIgnoreCase(response)) {
