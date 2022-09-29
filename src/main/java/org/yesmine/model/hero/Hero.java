@@ -2,15 +2,28 @@ package org.yesmine.model.hero;
 
 import org.yesmine.model.artefacts.Artefact;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+
 public abstract class Hero {
+    @PositiveOrZero
     private Integer id;
 
+    @Size(min = 0, max=10)
     private String name;
+    @NotNull
     private final String heroClass;
+    @Min(1)
     private Integer level;
+    @Min(1000)
     private Integer experience;
+    @PositiveOrZero
     private Integer attack;
+    @PositiveOrZero
     private Integer defence;
+    @PositiveOrZero
     private  Integer hitPoints;
     private Position position;
 

@@ -2,9 +2,15 @@ package org.yesmine.model.villain;
 
 import org.yesmine.model.artefacts.Artefact;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 public abstract class Villain {
+    @NotNull
     private String name;
+    @NotNull
     private final String villainClass;
+    @Min(0)
     private Integer power;
     private Artefact artefact;
 

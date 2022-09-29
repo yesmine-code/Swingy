@@ -1,9 +1,16 @@
 package org.yesmine.model.artefacts;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public abstract class Artefact {
+    @NotNull
     private String name;
+    @PositiveOrZero
     private Integer attackAffect;
+    @PositiveOrZero
     private Integer defenceAffect;
+    @PositiveOrZero
     private Integer hitPointsAffect;
 
     public Artefact(String name, Integer attackAffect, Integer defenceAffect, Integer hitPointsAffect) {
