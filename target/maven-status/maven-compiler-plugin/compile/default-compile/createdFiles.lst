@@ -21,6 +21,7 @@ org/yesmine/model/hero/Hero.class
 org/yesmine/model/hero/Voleuse.class
 org/yesmine/model/villain/VillainFactory.class
 org/yesmine/model/villain/Squelettes.class
+org/yesmine/dao/DatabaseDao.class
 org/yesmine/model/hero/HeroEnum.class
 org/yesmine/model/villain/Villain.class
 org/yesmine/dao/HeroDao.class
