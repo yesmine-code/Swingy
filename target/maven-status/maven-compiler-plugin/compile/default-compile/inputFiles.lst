@@ -8,6 +8,7 @@
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/Cochons.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Pekka.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/Squelettes.java
+/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/dao/HeroMapping.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/ArtefactEnum.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/controller/ArtefactService.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/dao/HeroDao.java
@@ -26,11 +27,13 @@
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Valkyrie.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Position.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/view/console/Colors.java
+/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/dao/entities/HeroEntity.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/HeroEnum.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/Artefact.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/App.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/MoveEnum.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/Barbares.java
+/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/utility/HibernateUtility.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/utility/FileManager.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Voleuse.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/Weapon.java

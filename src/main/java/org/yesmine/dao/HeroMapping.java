@@ -29,11 +29,9 @@ public class HeroMapping {
     }
 
     public static List<Hero> mapAllHeroEntitiesToHeroes(List<HeroEntity> heroEntities) throws HeroClassNotFoundException, ArtefactNotFoundException {
-        int i = 0;
         List<Hero> heroes = new ArrayList<>();
-        while (heroEntities.get(i) != null) {
-            heroes.add(mapHeroEntityToHero(heroEntities.get(i)));
-            i++;
+        for (HeroEntity heroEntity :heroEntities) {
+            heroes.add(mapHeroEntityToHero(heroEntity));
         }
         return heroes;
     }

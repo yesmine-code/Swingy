@@ -31,6 +31,9 @@ org/yesmine/model/hero/MoveEnum.class
 org/yesmine/exceptions/ArtefactNotFoundException.class
 org/yesmine/model/villain/Barbares.class
 org/yesmine/model/hero/Dragon.class
+org/yesmine/dao/entities/HeroEntity.class
+org/yesmine/utility/HibernateUtility.class
+org/yesmine/dao/HeroMapping.class
 org/yesmine/model/hero/Chevalier.class
 org/yesmine/controller/MapService.class
 org/yesmine/model/hero/HeroFactory.class

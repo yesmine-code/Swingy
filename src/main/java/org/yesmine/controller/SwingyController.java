@@ -1,5 +1,6 @@
 package org.yesmine.controller;
 
+import org.yesmine.dao.DatabaseDao;
 import org.yesmine.dao.FileDao;
 import org.yesmine.dao.HeroDao;
 import org.yesmine.exceptions.ArtefactNotFoundException;
@@ -21,7 +22,7 @@ public class SwingyController {
     private HeroDao heroDao;
 
     public SwingyController() throws FileNotFoundException {
-        heroDao = new FileDao();
+        heroDao = new DatabaseDao();
         heroService = new HeroService(heroDao);
         villainService = new VillainService();
         mapService = new MapService(villainService);

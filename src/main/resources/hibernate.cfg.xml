@@ -6,12 +6,12 @@
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL92Dialect</property>
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-        <property name="hibernate.connection.username">swingydb</property>
+        <property name="hibernate.connection.username">swingbyyesmine</property>
         <property name="hibernate.connection.password">mypass</property>
-        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/hibernatedb</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://localhost:5432/swingydb</property>
         <property name="connection_pool_size">1</property>
-        <property name="hbm2ddl.auto">create</property>
-        <property name="show_sql">true</property>
-        <mapping class="org.yesmine.model.hero.Hero"/>
+        <property name="hbm2ddl.auto">update</property>
+        <property name="show_sql">false</property>
+        <mapping class="org.yesmine.dao.entities.HeroEntity"/>
     </session-factory>
 </hibernate-configuration>

@@ -8,9 +8,11 @@ import org.yesmine.exceptions.VillainClassNotFoundException;
 import org.yesmine.view.console.Viewer;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class App {
     public static void main(String args[]) throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException, InterruptedException {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF); //disable hibernate logs
         SwingyController swing = new SwingyController();
         Viewer view = new Viewer(swing);
         while (true) {
