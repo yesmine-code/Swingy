@@ -26,7 +26,7 @@ public class DatabaseDao implements HeroDao {
     public List<Hero> getAllHeroes() throws HeroClassNotFoundException, ArtefactNotFoundException {
         Session session = HibernateUtility.getSessionFactory().openSession();
         session.beginTransaction();
-        List<HeroEntity> heroEntities = session.createQuery("SELECT * FROM HeroEntity", HeroEntity.class).getResultList();
+        List<HeroEntity> heroEntities = session.createQuery("SELECT a FROM HeroEntity a", HeroEntity.class).getResultList();
         List<Hero> heroes = HeroMapping.mapAllHeroEntitiesToHeroes(heroEntities);
         session.getTransaction().commit();
         HibernateUtility.shutdown();
