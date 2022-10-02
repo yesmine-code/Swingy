@@ -1,10 +1,15 @@
 package org.yesmine.model.villain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import org.yesmine.model.artefacts.Artefact;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+@Getter
+@Setter
 public abstract class Villain {
     @NotNull
     private String name;
@@ -18,34 +23,6 @@ public abstract class Villain {
         this.name = name;
         this.villainClass = villainClass;
         this.power = power;
-        this.artefact = artefact;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getVillainClass() {
-        return villainClass;
-    }
-
-    public Integer getPower() {
-        return power;
-    }
-
-    public void setPower(Integer power) {
-        this.power = power;
-    }
-
-    public Artefact getArtefact() {
-        return artefact;
-    }
-
-    public void setArtefact(Artefact artefact) {
         this.artefact = artefact;
     }
 }

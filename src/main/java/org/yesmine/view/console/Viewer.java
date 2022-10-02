@@ -2,7 +2,6 @@ package org.yesmine.view.console;
 
 import org.yesmine.controller.SwingyController;
 import org.yesmine.exceptions.ArtefactNotFoundException;
-import org.yesmine.exceptions.FileNotFoundException;
 import org.yesmine.exceptions.HeroClassNotFoundException;
 import org.yesmine.exceptions.VillainClassNotFoundException;
 import org.yesmine.model.artefacts.ArtefactEnum;
@@ -20,7 +19,7 @@ public class Viewer {
     static SwingyController swingy;
 
 
-    public Viewer(SwingyController swingy) throws FileNotFoundException {
+    public Viewer(SwingyController swingy) {
         this.swingy = swingy;
 
     }
@@ -75,7 +74,7 @@ public class Viewer {
         return response;
     }
 
-    public void createHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
+    public void createHero() throws IOException, VillainClassNotFoundException, ArtefactNotFoundException {
         clearScreen();
         createBanner();
         Integer heroClass = getHeroClass();
@@ -86,7 +85,7 @@ public class Viewer {
         printMap();
     }
 
-    public void startGame() throws IOException, InterruptedException, FileNotFoundException {
+    public void startGame() throws IOException, InterruptedException {
         while (!swingy.reachBorder()) {
             setMove();
             printMap();
@@ -100,7 +99,7 @@ public class Viewer {
         swingy.updateHero();
     }
 
-    public void selectHero() throws FileNotFoundException, IOException, VillainClassNotFoundException, HeroClassNotFoundException, ArtefactNotFoundException {
+    public void selectHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, ArtefactNotFoundException, InterruptedException {
         clearScreen();
         createBanner();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -125,7 +124,7 @@ public class Viewer {
         printMap();
     }
 
-    private void createNewHero() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, FileNotFoundException, ArtefactNotFoundException {
+    private void createNewHero() throws IOException, VillainClassNotFoundException, ArtefactNotFoundException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         if (swingy.previousHeroExist())
             System.out.println(Colors.RED + "THERE IS NO PREVIOUS HEROES PLEASE CREATE YOUR OWN HERO");
@@ -141,7 +140,7 @@ public class Viewer {
         }
     }
 
-    private static List<Hero> getHeroes() throws FileNotFoundException, IOException, HeroClassNotFoundException, ArtefactNotFoundException {
+    private static List<Hero> getHeroes() throws IOException, HeroClassNotFoundException, ArtefactNotFoundException {
         List<Hero> heroes = swingy.getAllHeroes();
         for (int i = 0; i < heroes.size(); i++) {
             System.out.println(i + "- " + heroes.get(i).toString());
@@ -264,12 +263,12 @@ public class Viewer {
         swingy.setNewPosition(response);
     }
 
-    public void winingPrint() throws IOException, FileNotFoundException {
+    public void winingPrint() throws IOException {
         System.out.println(Colors.GREEN + "CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS");
         restartGame();
     }
 
-    private void restartGame() throws IOException, FileNotFoundException {
+    private void restartGame() throws IOException {
         swingy.updateHero();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
@@ -304,7 +303,7 @@ public class Viewer {
         return response;
     }
 
-    public boolean fightScenario() throws IOException, InterruptedException, FileNotFoundException {
+    public boolean fightScenario() throws IOException, InterruptedException {
         Villain villain = swingy.villainExist();
         if (villain != null) {
             String response = villainMeeting(villain);
@@ -333,7 +332,7 @@ public class Viewer {
         return true;
     }
 
-    public void loosingPrint() throws IOException, InterruptedException, FileNotFoundException {
+    public void loosingPrint() throws IOException, InterruptedException {
         clearScreen();
         createBanner();
         System.out.println(Colors.RED_BOLD_BRIGHT + "GAME OVER");

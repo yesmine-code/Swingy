@@ -4,7 +4,6 @@ import org.yesmine.dao.DatabaseDao;
 import org.yesmine.dao.FileDao;
 import org.yesmine.dao.HeroDao;
 import org.yesmine.exceptions.ArtefactNotFoundException;
-import org.yesmine.exceptions.FileNotFoundException;
 import org.yesmine.exceptions.HeroClassNotFoundException;
 import org.yesmine.exceptions.VillainClassNotFoundException;
 import org.yesmine.model.hero.Hero;
@@ -21,27 +20,26 @@ public class SwingyController {
     private ArtefactService artefactService;
     private HeroDao heroDao;
 
-    public SwingyController() throws FileNotFoundException {
-        heroDao = new DatabaseDao();
+    public SwingyController() throws IOException {
+        heroDao = new FileDao();
         heroService = new HeroService(heroDao);
         villainService = new VillainService();
         mapService = new MapService(villainService);
         artefactService = new ArtefactService();
     }
 
-    public void initGame(Integer id, String name, String heroClass, String artefact, int xp) throws HeroClassNotFoundException, VillainClassNotFoundException, ArtefactNotFoundException, FileNotFoundException, IOException {
+    public void initGame(Integer id, String name, String heroClass, String artefact, int xp) throws VillainClassNotFoundException, ArtefactNotFoundException, IOException {
         Hero hero = heroService.createHero(id, heroClass, name, artefact, xp);
         mapService.initMap(hero);
         mapService.putHeroInitialPosition();
-
     }
 
 
-    public List<Hero> getAllHeroes() throws HeroClassNotFoundException, FileNotFoundException, IOException, ArtefactNotFoundException {
+    public List<Hero> getAllHeroes() throws HeroClassNotFoundException, IOException, ArtefactNotFoundException {
         return heroService.getAllHeroes();
     }
 
-    public void saveHero(Hero hero) throws FileNotFoundException {
+    public void saveHero(Hero hero) throws IOException {
         heroService.saveHero(hero);
     }
 
@@ -49,50 +47,52 @@ public class SwingyController {
         return heroService.computeMapSize(hero);
     }
 
-    public void setNewPosition(String response){
+    public void setNewPosition(String response) {
         mapService.setNewPosition(response);
     }
 
-    public boolean reachBorder(){
+    public boolean reachBorder() {
         return mapService.reachBorder();
     }
 
-    public Hero getHero(){
+    public Hero getHero() {
         return mapService.getHero();
     }
 
-    public void updateHero() throws FileNotFoundException, IOException {
+    public void updateHero() throws IOException {
         Hero hero = mapService.getHero();
         heroDao.updateHero(hero);
     }
 
-    public boolean previousHeroExist(){
+    public boolean previousHeroExist() {
         return heroDao.previousHeroExist();
     }
+
     public void makeEmpty() throws java.io.FileNotFoundException {
         heroDao.makeEmpty();
     }
-    public Villain villainExist(){
+
+    public Villain villainExist() {
         return mapService.villainExist();
     }
 
-    public boolean heroWinsFight(Villain villain){
+    public boolean heroWinsFight(Villain villain) {
         return mapService.heroWinsFight(villain);
     }
 
-    public boolean runnigSimulation(){
+    public boolean runnigSimulation() {
         return mapService.runningSimulator();
     }
 
-    public void returnToPreviousPosition(){
+    public void returnToPreviousPosition() {
         mapService.getHero().setPosition(getHero().getPreviousPosition());
     }
 
-    public void  changeArtefact(Villain villain){
+    public void changeArtefact(Villain villain) {
         mapService.changeArtefact(villain);
     }
 
-    public void setNewXp(Villain villain){
+    public void setNewXp(Villain villain) {
         mapService.setNewXp(villain);
     }
 

@@ -1,7 +1,5 @@
 package org.yesmine.utility;
 
-import org.yesmine.exceptions.FileNotFoundException;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -14,21 +12,20 @@ public class FileManager {
     public static FileManager fileManager;
 
     private FileManager() {
-
     }
 
-    private static void createFile(String filename) throws FileNotFoundException {
+    private static void createFile(String filename) throws IOException {
         try {
             File myObj = new File(filename);
             myObj.createNewFile();
             file = myObj;
         } catch (IOException e) {
             System.out.println("An error occurred.");
-            throw new FileNotFoundException(file.getName());
+            throw e;
         }
     }
 
-    public static FileManager getFile(String fileName) throws FileNotFoundException {
+    public static FileManager getFile(String fileName) throws IOException {
         if (fileManager == null) {
             fileManager = new FileManager();
             createFile(fileName);
@@ -36,7 +33,7 @@ public class FileManager {
         return fileManager;
     }
 
-    public static void writeIntoFile(String str) throws FileNotFoundException {
+    public static void writeIntoFile(String str) throws IOException {
         getFile(file.getName());
         try {
             FileWriter myWriter = new FileWriter(file.getName(), true);
@@ -45,6 +42,7 @@ public class FileManager {
             printWriter.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
+            throw e;
         }
     }
 

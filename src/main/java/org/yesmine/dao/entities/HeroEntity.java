@@ -3,7 +3,6 @@ package org.yesmine.dao.entities;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.yesmine.model.artefacts.Artefact;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

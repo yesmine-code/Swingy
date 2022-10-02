@@ -1,5 +1,8 @@
 package org.yesmine.model.artefacts;
 
+import lombok.Getter;
+
+@Getter
 public enum ArtefactEnum {
     GUNWEAPON("gunWeapon", 1200),
     KNIFEWEAPON("knifeWeapon", 1000),
@@ -18,11 +21,4 @@ public enum ArtefactEnum {
         this.power = power;
     }
 
-    public Integer getPower() {
-        return power;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

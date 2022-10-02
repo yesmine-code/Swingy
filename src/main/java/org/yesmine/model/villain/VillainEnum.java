@@ -1,5 +1,10 @@
 package org.yesmine.model.villain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum VillainEnum {
     SQUELETTES("Squelettes", 400),
     COCHONS("cochons", 500),
@@ -7,17 +12,4 @@ public enum VillainEnum {
 
     private String name;
     private Integer power;
-
-    VillainEnum(String name, Integer power) {
-        this.name = name;
-        this.power = power;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Integer getPower() {
-        return power;
-    }
 }

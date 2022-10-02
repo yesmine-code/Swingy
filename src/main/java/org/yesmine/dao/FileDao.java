@@ -1,7 +1,6 @@
 package org.yesmine.dao;
 
 import org.yesmine.exceptions.ArtefactNotFoundException;
-import org.yesmine.exceptions.FileNotFoundException;
 import org.yesmine.exceptions.HeroClassNotFoundException;
 import org.yesmine.model.artefacts.ArtefactFactory;
 import org.yesmine.model.hero.Hero;
@@ -24,21 +23,21 @@ public class FileDao implements HeroDao {
     ArtefactFactory artefactFactory;
     HeroFactory heroFactory;
 
-    public FileDao() throws FileNotFoundException {
+    public FileDao() throws IOException {
         this.fileManager = getFile("PreviousHeroes");
         this.heroFactory = new HeroFactory();
         this.artefactFactory = new ArtefactFactory();
     }
 
     @Override
-    public void saveHero(Hero hero) throws FileNotFoundException {
+    public void saveHero(Hero hero) throws IOException {
         FileManager.writeIntoFile(hero.getId() + " " + hero.getName() + " " + hero.getHeroClass()
                 + " " + hero.getExperience() + " " + hero.getArtefact());
 
     }
 
     @Override
-    public List<Hero> getAllHeroes() throws FileNotFoundException, IOException {
+    public List<Hero> getAllHeroes() throws  IOException {
         getFile(file.getName());
         BufferedReader br = new BufferedReader(new FileReader(file.getName()));
         String line;
@@ -54,23 +53,19 @@ public class FileDao implements HeroDao {
         return heroes;
     }
     @Override
-    public Integer getNextId() throws FileNotFoundException, IOException {
-        try {
-            Integer i = 0;
-            getFile(file.getName());
-            BufferedReader br = new BufferedReader(new FileReader(file.getName()));
-            String line;
-            while ((line = br.readLine()) != null) {
-                i++;
-            }
-            return i + 1;
-        }catch (FileNotFoundException | IOException e){
+    public Integer getNextId() throws IOException {
+        Integer i = 0;
+        getFile(file.getName());
+        BufferedReader br = new BufferedReader(new FileReader(file.getName()));
+        String line;
+        while ((line = br.readLine()) != null) {
+            i++;
         }
-        return 1;
+        return i + 1;
     }
 
     @Override
-    public void updateHero(Hero hero) throws FileNotFoundException, IOException {
+    public void updateHero(Hero hero) throws IOException {
         Integer lineToErase = hero.getId();
         String newLine = hero.getId() + " " + hero.getName() + " " + hero.getHeroClass()
                 + " " + hero.getExperience() + " " + hero.getArtefact();

@@ -1,5 +1,7 @@
 package org.yesmine.model.hero;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.yesmine.model.artefacts.Artefact;
 
 import javax.validation.constraints.Min;
@@ -7,11 +9,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+@Getter
+@Setter
 public abstract class Hero {
     @PositiveOrZero
     private Integer id;
 
-    @Size(min = 0, max=10)
+    @Size(min = 0, max = 10)
     private String name;
     @NotNull
     private final String heroClass;
@@ -24,7 +28,7 @@ public abstract class Hero {
     @PositiveOrZero
     private Integer defence;
     @PositiveOrZero
-    private  Integer hitPoints;
+    private Integer hitPoints;
     private Position position;
 
     private Position previousPosition;
@@ -45,100 +49,15 @@ public abstract class Hero {
         this.artefact = artefact;
     }
 
-    public Position getPosition() {
-        return position;
-    }
 
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Artefact getArtefact() {
-        return artefact;
-    }
-
-    public void setArtefact(Artefact artefact) {
-        this.artefact = artefact;
-    }
-
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
-    }
-
-    public void setExperience(Integer experience) {
-        this.experience = experience;
-    }
-
-    public void setAttack(Integer attack) {
-        this.attack = attack;
-    }
-
-    public void setDefence(Integer defence) {
-        this.defence = defence;
-    }
-
-    public void setHitPoints(Integer hitPoints) {
-        this.hitPoints = hitPoints;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getHeroClass() {
-        return heroClass;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public Integer getExperience() {
-        return experience;
-    }
-
-    public Integer getAttack() {
-        return attack;
-    }
-
-    public Integer getDefence() {
-        return defence;
-    }
-
-    public Integer getHitPoints() {
-        return hitPoints;
-    }
-
-
-    public Integer computeMapSize(){
+    public Integer computeMapSize() {
         return ((this.level - 1) * 5 + 10 - (this.level % 2));
     }
 
-    public void computeLevel(){
+    public void computeLevel() {
         level = 1;
         while ((level * 1000) + (level - 1) * (level - 1) * 450 < experience)
             level++;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public Position getPreviousPosition() {
-        return previousPosition;
-    }
-
-    public void setPreviousPosition(Position previousPosition) {
-        this.previousPosition = previousPosition;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     @Override

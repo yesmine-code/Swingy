@@ -3,7 +3,6 @@ package org.yesmine.dao;
 import org.hibernate.Session;
 import org.yesmine.dao.entities.HeroEntity;
 import org.yesmine.exceptions.ArtefactNotFoundException;
-import org.yesmine.exceptions.FileNotFoundException;
 import org.yesmine.exceptions.HeroClassNotFoundException;
 import org.yesmine.model.hero.Hero;
 import org.yesmine.utility.HibernateUtility;
@@ -13,7 +12,7 @@ import java.util.List;
 
 public class DatabaseDao implements HeroDao {
     @Override
-    public void saveHero(Hero hero) throws FileNotFoundException {
+    public void saveHero(Hero hero) {
         Session session = HibernateUtility.getSessionFactory().openSession();
         session.beginTransaction();
         HeroEntity heroEntity = HeroMapping.mapHeroToHeroEntity(hero);
