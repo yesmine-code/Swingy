@@ -28,16 +28,15 @@
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Position.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/view/console/Colors.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/dao/entities/HeroEntity.java
+/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/view/swing/Swing.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/HeroEnum.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/Artefact.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/App.java
-/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/MoveEnum.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/Barbares.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/utility/HibernateUtility.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/utility/FileManager.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Voleuse.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/Weapon.java
-/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/exceptions/FileNotFoundException.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/controller/MapService.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/controller/VillainService.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/exceptions/ArtefactNotFoundException.java

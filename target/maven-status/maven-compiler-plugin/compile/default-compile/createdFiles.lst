@@ -8,6 +8,8 @@ org/yesmine/controller/ArtefactService.class
 org/yesmine/model/villain/Cochons.class
 org/yesmine/view/console/Colors.class
 org/yesmine/view/console/Viewer.class
+org/yesmine/view/swing/Swing$3.class
+org/yesmine/view/swing/Swing.class
 org/yesmine/App.class
 org/yesmine/model/hero/Sorcier.class
 org/yesmine/model/villain/VillainEnum.class
@@ -17,6 +19,7 @@ org/yesmine/model/hero/Prince.class
 org/yesmine/controller/VillainService.class
 org/yesmine/model/artefacts/Helm.class
 org/yesmine/exceptions/HeroClassNotFoundException.class
+org/yesmine/view/swing/Swing$1.class
 org/yesmine/model/hero/Hero.class
 org/yesmine/model/hero/Voleuse.class
 org/yesmine/model/villain/VillainFactory.class
@@ -27,9 +30,10 @@ org/yesmine/model/villain/Villain.class
 org/yesmine/dao/HeroDao.class
 org/yesmine/dao/FileDao.class
 org/yesmine/controller/SwingyController.class
-org/yesmine/model/hero/MoveEnum.class
 org/yesmine/exceptions/ArtefactNotFoundException.class
+org/yesmine/view/swing/Swing$4.class
 org/yesmine/model/villain/Barbares.class
+org/yesmine/view/swing/Swing$2.class
 org/yesmine/model/hero/Dragon.class
 org/yesmine/dao/entities/HeroEntity.class
 org/yesmine/utility/HibernateUtility.class
@@ -37,7 +41,6 @@ org/yesmine/dao/HeroMapping.class
 org/yesmine/model/hero/Chevalier.class
 org/yesmine/controller/MapService.class
 org/yesmine/model/hero/HeroFactory.class
-org/yesmine/exceptions/FileNotFoundException.class
 org/yesmine/model/artefacts/Artefact.class
 org/yesmine/utility/FileManager.class
 org/yesmine/model/hero/Position.class
