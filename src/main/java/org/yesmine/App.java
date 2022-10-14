@@ -17,7 +17,7 @@ public class App {
         SwingyController swing = new SwingyController();
         Viewer view = new Viewer(swing);;
         Swing swing1 = new Swing(swing);
-        swing1.welcome();
+       // swing1.welcome();
         while (true) {
             view.welcome();
             String response = view.creatOrSelectHero();
