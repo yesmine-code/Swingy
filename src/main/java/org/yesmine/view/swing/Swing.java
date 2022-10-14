@@ -42,7 +42,6 @@ public class Swing {
         centerPanel.setPreferredSize(new Dimension(800, 600));
         initiateRightPanel();
         initiateLeftPanel();
-        centerPanel = new ImagePanel("images/loading1.png");
         frame.setLayout(new BorderLayout());
         frame.add(startPanel, BorderLayout.PAGE_START);
         frame.add(leftPanel, BorderLayout.WEST);
@@ -99,7 +98,6 @@ public class Swing {
     private void initiateRightPanel() throws IOException {
         JButton buttonExit = new JButton("");
         URL url = ClassLoader.getSystemResources("images/icons8-exit-64.png").nextElement();
-        buttonExit.setBorder(BorderFactory.createEmptyBorder());
         buttonExit.setContentAreaFilled(false);
         BufferedImage buttonIcon = ImageIO.read(url);
         buttonExit.setIcon(new ImageIcon(buttonIcon));
@@ -217,7 +215,7 @@ public class Swing {
                     buttonYes.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
-                            heroArtefact = HeroEnum.values()[finalI1].toString();
+                            heroArtefact = ArtefactEnum.values()[finalI1].toString();
                             //init game
                         }
                     });
@@ -230,7 +228,6 @@ public class Swing {
     }
 
     private void createButtonIcon(int i, JButton btn, URL url) throws IOException {
-        btn.setBorder(BorderFactory.createEmptyBorder());
         btn.setContentAreaFilled(false);
         BufferedImage buttonIcon = ImageIO.read(url);
         btn.setIcon(new ImageIcon(buttonIcon));
