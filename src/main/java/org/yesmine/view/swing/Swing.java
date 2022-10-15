@@ -100,7 +100,7 @@ public class Swing {
     }
 
     private void initiateRightPanel() throws IOException {
-        rightPanel.setLayout(new GridLayout(2,1));
+        rightPanel.setLayout(new GridLayout(2, 1));
         JButton buttonExit = new JButton("");
         URL url = ClassLoader.getSystemResources("images/icons8-exit-64.png").nextElement();
         buttonExit.setContentAreaFilled(false);
@@ -109,13 +109,21 @@ public class Swing {
         buttonExit.setPreferredSize(new Dimension(buttonIcon.getWidth(), buttonIcon.getHeight()));
         buttonExit.addActionListener(actionEvent -> System.exit(0));
         rightPanel.add(buttonExit);
+        initiateArrowPanel();
+    }
+
+    private void initiateArrowPanel() throws IOException {
         arrowPanel = new JPanel();
-        arrowPanel.setLayout(new GridLayout(3,3));
+        arrowPanel.setLayout(new GridLayout(3, 3));
         URL url2 = ClassLoader.getSystemResources("images/arrow.png").nextElement();
         JButton up = new JButton();
         JButton down = new JButton();
         JButton left = new JButton();
         JButton right = new JButton();
+        up.setContentAreaFilled(false);
+        down.setContentAreaFilled(false);
+        left.setContentAreaFilled(false);
+        right.setContentAreaFilled(false);
         BufferedImage upIcon = ImageIO.read(url2);
         Image newImage = upIcon.getScaledInstance(30, 30, Image.SCALE_DEFAULT);
         RotatedIcon rup = new RotatedIcon(new ImageIcon(newImage), RotatedIcon.Rotate.DOWN);
@@ -123,6 +131,85 @@ public class Swing {
         RotatedIcon rleft = new RotatedIcon(new ImageIcon(newImage), RotatedIcon.Rotate.ABOUT_CENTER);
         RotatedIcon rright = new RotatedIcon(new ImageIcon(newImage), RotatedIcon.Rotate.UPSIDE_DOWN);
         up.setIcon(rup);
+        up.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!swingy.reachBorder()) {
+                    swingy.setNewPosition("U");
+                    try {
+                        printMap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        printWining();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            }
+        });
+        down.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!swingy.reachBorder()) {
+                    swingy.setNewPosition("D");
+                    try {
+                        printMap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                } else {
+                    try {
+                        printWining();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+
+            }
+        });
+        left.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!swingy.reachBorder()) {
+                    swingy.setNewPosition("L");
+                    try {
+                        printMap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        printWining();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+        right.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!swingy.reachBorder()) {
+                    swingy.setNewPosition("R");
+                    try {
+                        printMap();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    try {
+                        printWining();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
         down.setIcon(rdown);
         left.setIcon(rleft);
         right.setIcon(rright);
@@ -142,24 +229,22 @@ public class Swing {
 
     private void printMap() throws IOException {
         clearCenterPanel();
-        printInfos();
         Integer mapSize = swingy.computeMapSize(swingy.getHero());
-        centerPanel.setLayout(new GridLayout(mapSize,mapSize));
+        centerPanel.setLayout(new GridLayout(mapSize, mapSize));
         int i = 0;
         int j = 0;
-        while (i < mapSize){
+        while (i < mapSize) {
             j = 0;
             while (j < mapSize) {
                 JLabel label = new JLabel("");
                 label.setPreferredSize(new Dimension(centerPanel.getWidth() / mapSize, centerPanel.getHeight() / mapSize));
                 label.setOpaque(true);
-                if (i == mapSize/ 2 && j == mapSize/2){
+                if (i == swingy.getHero().getPosition().getY() && j == swingy.getHero().getPosition().getX()) {
                     URL url = ClassLoader.getSystemResources(HeroEnum.valueOf(swingy.getHero().getHeroClass().toUpperCase()).getImage()).nextElement();
                     BufferedImage labelIcon = ImageIO.read(url);
                     Image newImage = labelIcon.getScaledInstance(centerPanel.getWidth() / mapSize, centerPanel.getHeight() / mapSize, Image.SCALE_DEFAULT);
                     label.setIcon(new ImageIcon(newImage));
-                }
-                else if ((i + j) % 2 == 0 )
+                } else if ((i + j) % 2 == 0)
                     label.setBackground(Color.GRAY);
                 label.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(255, 255, 255)));
                 label.setOpaque(true);
@@ -177,7 +262,7 @@ public class Swing {
         Hero hero = swingy.getHero();
         JLabel leftLabel = new JLabel("<html>YOU MUST REACH ONE OF THE BORDERS OF THE MAP <br/> INFOS : <BR/>" +
                 "NAME = " + hero.getName() + "<br/>CLASS = " + hero.getHeroClass() + "<br/>ATTACK = " + hero.getAttack() +
-                "<br/>DEFENCE = "+ hero.getDefence() +"<br/>HITPOINTS = " +hero.getHitPoints() + "<br/>ARTEFACT = "
+                "<br/>DEFENCE = " + hero.getDefence() + "<br/>HITPOINTS = " + hero.getHitPoints() + "<br/>ARTEFACT = "
                 + hero.getArtefact().getName() + "<br/>POWER = " + ArtefactEnum.valueOf(hero.getArtefact().getName()).getPower() + "<html/>"
         );
         leftLabel.setPreferredSize(new Dimension(150, 200));
@@ -242,6 +327,7 @@ public class Swing {
         leftPanel.add(label);
         leftPanel.add(textField);
     }
+
     private void chooseHeroArtefact() throws IOException {
         clearLeftPanel();
         clearCenterPanel();
@@ -268,9 +354,10 @@ public class Swing {
                             try {
                                 swingy.initGame(-1, heroName, heroClass, heroArtefact, 1000);
                                 swingy.saveHero(swingy.getHero());
+                                printInfos();
                                 printMap();
 
-                            } catch (VillainClassNotFoundException |ArtefactNotFoundException | IOException e) {
+                            } catch (VillainClassNotFoundException | ArtefactNotFoundException | IOException e) {
                                 throw new RuntimeException(e);
                             }
                         }
@@ -304,8 +391,8 @@ public class Swing {
                 public void actionPerformed(ActionEvent actionEvent) {
                     clearLeftPanel();
                     JLabel label = new JLabel();
-                    label.setText("<html>Class = " + HeroEnum.values()[finalI1].toString() +"<br/>"+
-                            " Attack = " + HeroEnum.values()[finalI1].getAttack() + "<br/> Defence = " + HeroEnum.values()[finalI1].getDefence() +"<br/> HitPoints = "
+                    label.setText("<html>Class = " + HeroEnum.values()[finalI1].toString() + "<br/>" +
+                            " Attack = " + HeroEnum.values()[finalI1].getAttack() + "<br/> Defence = " + HeroEnum.values()[finalI1].getDefence() + "<br/> HitPoints = "
                             + HeroEnum.values()[finalI1].getHitPoints() + "<br/> please confirm your choice");
                     label.setPreferredSize(new Dimension(150, 200));
                     JButton buttonYes = new JButton("yes");
@@ -329,55 +416,43 @@ public class Swing {
             });
             centerPanel.add(btn);
         }
+    }
 
-
+    private void printWining() throws IOException {
+        clearCenterPanel();
+        centerPanel.setLayout(new GridLayout(2,1));
+        URL url = ClassLoader.getSystemResources("images/victory.jpeg").nextElement();
+        JLabel label =  new JLabel();
+        JLabel label2 =  new JLabel("<html>CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS<html/>");
+        BufferedImage labelIcon = ImageIO.read(url);
+        Image newImage = labelIcon.getScaledInstance(500, 200, Image.SCALE_DEFAULT);
+        label.setIcon(new ImageIcon(newImage));
+        label.setPreferredSize(new Dimension(labelIcon.getWidth(), labelIcon.getHeight()));
+        centerPanel.add(label);
+        centerPanel.add(label2);
+        restart();
 
     }
 
-
-  /*  private void getHeroClass(){
+    private void restart() throws IOException {
         clearLeftPanel();
-        JLabel label = new JLabel();
-        label.setText("<html>");
-        for (int i = 0; i < HeroEnum.values().length; i++) {
-            label.setText(label.getText() + i + "- " + HeroEnum.values()[i].toString() +
-                    " Attack = " + HeroEnum.values()[i].getAttack() + " Defence = " + HeroEnum.values()[i].getDefence() + " HitPoints = "
-                    + HeroEnum.values()[i].getHitPoints()+"<br/>");
-        }
-        for (int i = 0; i < HeroEnum.values().length; i++) {
-            JButton heroClass = new JButton(HeroEnum.values()[i].toString());
-            heroClass.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    String hero;
-                    hero = heroClass.getText();
+        leftPanel.setLayout(new GridLayout(2, 1));
+        JButton restart = new JButton();
+        restart.setContentAreaFilled(false);
+        URL url2 = ClassLoader.getSystemResources("images/replay.png").nextElement();
+        BufferedImage buttonIcon = ImageIO.read(url2);
+        restart.setIcon(new ImageIcon(buttonIcon));
+        restart.setPreferredSize(new Dimension(buttonIcon.getWidth(), buttonIcon.getHeight()));
+        restart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    Swing s = new Swing(swingy);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            });
-            leftPanel.add(heroClass);
-        }
-        label.setText(label.getText() + "</html>");
-        leftPanel.add(label);
-    }*/
-
-
-}
-
-     /*   while (true) {
-            label.setText("PLEASE SELECT YOUR HERO CLASS");
-            JTextField testField = new JTextField(10);
-            panel.add(testField);
-            testField.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent ae) {
-                    response = testField.getText();
-
-                }
-            });
-            try {
-                heroNum = Integer.parseInt(response);
-                if (Integer.parseInt(response) >= 0 && Integer.parseInt(response) < HeroEnum.values().length)
-                    break;
-            }catch (NumberFormatException e){
             }
-        }
-        return heroNum;
-    }*/
+        });
+        leftPanel.add(restart);
+    }
+}
