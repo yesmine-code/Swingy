@@ -6,10 +6,15 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum VillainEnum {
-    SQUELETTES("Squelettes", 400),
-    COCHONS("cochons", 500),
-    BARBARES("Barbares", 550);
+    SQUELETTES("Squelettes", 400, "images/squelettes.png"),
+    COCHONS("cochons", 500, "images/cochons.png"),
+    BARBARES("Barbares", 550, "images/barbares.png");
 
     private String name;
     private Integer power;
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
 }
