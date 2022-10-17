@@ -17,6 +17,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 
 public class Swing {
 
@@ -154,10 +155,10 @@ public class Swing {
         if (swingy.reachBorder()) {
             printWining();
         }
-        checkVillainExist();
-        //  if (!fightScenario())
-        //    break;
-        swingy.updateHero();
+        else {
+            checkVillainExist();
+            swingy.updateHero();
+        }
     }
 
     private void checkVillainExist() {
@@ -259,7 +260,7 @@ public class Swing {
         JLabel leftLabel = new JLabel("<html>YOU MUST REACH ONE OF THE BORDERS OF THE MAP <br/> INFOS : <BR/>" +
                 "NAME = " + hero.getName() + "<br/>CLASS = " + hero.getHeroClass() + "<br/>ATTACK = " + hero.getAttack() +
                 "<br/>DEFENCE = " + hero.getDefence() + "<br/>HITPOINTS = " + hero.getHitPoints() + "<br/>ARTEFACT = "
-                + hero.getArtefact().getName() + "<br/>POWER = " + ArtefactEnum.valueOf(hero.getArtefact().getName()).getPower() + "<html/>"
+                + hero.getArtefact().getName() + "<br/>POWER = " + ArtefactEnum.valueOf(hero.getArtefact().getName().toUpperCase()).getPower() + "<html/>"
         );
         leftLabel.setPreferredSize(new Dimension(150, 200));
         leftPanel.add(leftLabel);
@@ -415,13 +416,11 @@ public class Swing {
     private void printWining() throws IOException {
         clearCenterPanel();
         centerPanel.setLayout(new GridLayout(2, 1));
-        URL url = ClassLoader.getSystemResources("images/victory.jpeg").nextElement();
-        JLabel label = new JLabel();
-        JLabel label2 = new JLabel("<html>CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS<html/>");
-        BufferedImage labelIcon = ImageIO.read(url);
-        Image newImage = labelIcon.getScaledInstance(500, 200, Image.SCALE_DEFAULT);
-        label.setIcon(new ImageIcon(newImage));
-        label.setPreferredSize(new Dimension(labelIcon.getWidth(), labelIcon.getHeight()));
+        JLabel label = setIconToLabel("images/victory.jpeg");
+        label.setVerticalAlignment(SwingConstants.CENTER);
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel label2 = new JLabel("<html>CONGRATULATIONS ON YOUR WELL-DESERVED SUCCESS<html/>", SwingConstants.CENTER);
+        arrowPanel.setVisible(false);
         centerPanel.add(label);
         centerPanel.add(label2);
         restart();
@@ -430,12 +429,7 @@ public class Swing {
     private void restart() throws IOException {
         clearLeftPanel();
         leftPanel.setLayout(new GridLayout(2, 1));
-        JButton restart = new JButton();
-        restart.setContentAreaFilled(false);
-        URL url2 = ClassLoader.getSystemResources("images/replay.png").nextElement();
-        BufferedImage buttonIcon = ImageIO.read(url2);
-        restart.setIcon(new ImageIcon(buttonIcon));
-        restart.setPreferredSize(new Dimension(buttonIcon.getWidth(), buttonIcon.getHeight()));
+        JButton restart = setIconToButton("images/restart.png");
         restart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -454,13 +448,13 @@ public class Swing {
         leftPanel.setLayout(new GridLayout(3, 1));
         JLabel heroInfos = new JLabel("<html> NAME = " + hero.getName() + "<br/>CLASS = " + hero.getHeroClass() + "<br/>ATTACK = " + hero.getAttack() +
                 "<br/>DEFENCE = " + hero.getDefence() + "<br/>HITPOINTS = " + hero.getHitPoints() + "<br/>ARTEFACT = " +
-                hero.getArtefact().getName() + "<br/>POWER = " + ArtefactEnum.valueOf(hero.getArtefact().getName()).getPower() + "<html/>");
+                hero.getArtefact().getName() + "<br/>POWER = " + ArtefactEnum.valueOf(hero.getArtefact().getName().toUpperCase()).getPower() + "<html/>");
         JLabel villainInfos = new JLabel("<html> CLASS = " + villain.getVillainClass() + "<br/>POWER = " + villain.getPower() + "<br/>ARTEFACT = " +
                 villain.getArtefact().getName().toUpperCase() + "<html/>");
         JLabel fightOrRun = new JLabel("<html>DO YOU WANT TO RUN OR TO FiGHT?<html/>");
-        heroInfos.setPreferredSize(new Dimension(130, 200));
-        villainInfos.setPreferredSize(new Dimension(130, 200));
-        fightOrRun.setPreferredSize(new Dimension(130, 200));
+        heroInfos.setPreferredSize(new Dimension(120, 200));
+        villainInfos.setPreferredSize(new Dimension(120, 200));
+        fightOrRun.setPreferredSize(new Dimension(120, 200));
         leftPanel.add(heroInfos);
         leftPanel.add(villainInfos);
         leftPanel.add(fightOrRun);
@@ -530,60 +524,146 @@ public class Swing {
 
     private void run(Villain villain) throws IOException, InterruptedException {
         clearLeftPanel();
-        clearCenterPanel();
+    //    clearCenterPanel();
         if (swingy.runnigSimulation()) {
             swingy.returnToPreviousPosition();
-            printMap();
             printInfos();
+            printMap();
         } else {
-            JLabel label = new JLabel("<html>TOO LATE YOU GOT NO LUCK THIS TIME<br/>YOU MUST FIGHT");
+            clearLeftPanel();
+            JLabel label = new JLabel("<html>TOO LATE YOU GOT NO LUCK THIS TIME<br/>YOU MUST FIGHT<html/>");
+            label.setPreferredSize(new Dimension(120, 200));
             leftPanel.add(label);
+
             fight(villain);
         }
     }
 
-    private void fight(Villain villain) throws IOException, InterruptedException {
-        clearCenterPanel();
+
+    private void getVillainArtefact(Villain villain) throws IOException {
         clearLeftPanel();
-        centerPanel.setLayout(new GridLayout(2, 3));
-        heroVsVillain(villain);
-        centerPanel.add(new JLabel());
-        JLabel loading = setIconToLabel("images/loading.png");
-        centerPanel.add(loading);
-        JLabel label = new JLabel("<html>-COME ON DO YOU FEAR ME !!<br/>");
-        label.setText(label + "-NO I AM JUST PRAYING FOR YOU I AM GOING TO KILL YOU<br/>");
-        label.setText(label + "-AOUUUUCH<br/>");
-        label.setText(label + "-OH MY GOD THAT HURTS<br/>");
-        label.setText(label + "-AYYYYY<html/>");
-        leftPanel.add(label);
-    }
-
-
-        /*
-            String response = villainMeeting(villain)
-            if ("R".equalsIgnoreCase(response)) {
-                if (swingy.runnigSimulation()) {
-                    swingy.returnToPreviousPosition();
+        clearCenterPanel();
+        leftPanel.setLayout(new FlowLayout());
+        JLabel heroArtefact = setIconToLabel(ArtefactEnum.valueOf(swingy.getHero().getArtefact().getName().toUpperCase()).getImage());
+        JLabel villainArtefact = setIconToLabel(ArtefactEnum.valueOf(villain.getArtefact().getName().toUpperCase()).getImage());
+        JLabel heroArt = new JLabel("<html>YOUR ARTEFACT: <br/>" + swingy.getHero().getArtefact().getName().toUpperCase() + "<br/>"
+                +ArtefactEnum.valueOf(swingy.getHero().getArtefact().getName().toUpperCase()).getPower() + "<html/>");
+        JLabel villainArt = new JLabel("<html>VILLAIN ARTEFACT: <br/>" + villain.getArtefact().getName().toUpperCase() + "<br/>"
+                +ArtefactEnum.valueOf(villain.getArtefact().getName().toUpperCase()).getPower() + "<html/>");
+        leftPanel.add(heroArtefact);
+        leftPanel.add(heroArt);
+        leftPanel.add(villainArtefact);
+        leftPanel.add(villainArt);
+        centerPanel.setLayout(new BorderLayout());
+        JLabel win = setIconToLabel("images/winner.png");
+        win.setHorizontalAlignment(SwingConstants.CENTER);
+        win.setVerticalAlignment(SwingConstants.CENTER);
+        JLabel winLabel =  new JLabel("<html>CONGRATULATIONS YOU JUST WON THIS FIGHT<br/>YOUR NEW XP = " + swingy.getHero().getExperience()
+                + "<br/>DO YOU WANT TO TAKE THE VILLAIN ARTEFACT?<br/> IF YOU DO YOU WILL DROP YOURS<br/>" + "PLEASE MAKE SURE YOU KEEP THE RIGHT ONE<html/>", SwingConstants.CENTER);
+        JButton yes = new JButton("yes");
+        yes.setBackground(Color.GRAY);
+        JButton no = new JButton("no ");
+        no.setBackground(Color.GRAY);
+        yes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                swingy.changeArtefact(villain);
+                try {
+                    printInfos();
                     printMap();
-                    System.out.println(Colors.RED + "YOU JUST RETURNED TO PREVIOUS POSITION PLEASE SET YOUR NEXT MOVE");
-                    return true;
-                } else {
-                    System.out.println("TOO LATE BODY LUCK ISN'T BY YOUR SIDE THIS TIME");
-                    Thread.sleep(1000);
-                    System.out.println("YOU MUST FIGHT");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
             }
-            fightingPrint();
-            if (swingy.heroWinsFight(villain)) {
-                getVillainArtefact(villain);
-                printMap();
-                System.out.println("PLEASE SET YOUR NEXT MOVE");
-                return true;
+        });
+        no.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    printInfos();
+                    printMap();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-            loosingPrint();
-            return false;
+        });
+        JPanel p = new JPanel();
+        p.setLayout(new BorderLayout());
+        p.add(winLabel, BorderLayout.PAGE_START);
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout());
+        panel.add(yes);
+        panel.add(no);
+        p.add(panel, BorderLayout.CENTER);
+        centerPanel.add(win, BorderLayout.PAGE_START);
+        centerPanel.add(p, BorderLayout.CENTER);
+    }
+
+    private void fill(JProgressBar bar){
+        int i = 0;
+        try {
+            while (i <= 100){
+                bar.setValue(i + 10);
+                Thread.sleep(500);
+                i+=10;
+            }
         }
-        return true;
-    }*/
+        catch (Exception e){
+
+        }
+    }
+    private void fight(Villain villain) throws IOException, InterruptedException {
+        clearLeftPanel();
+        heroVsVillain(villain);
+        centerPanel.add(new JLabel());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        JProgressBar bar = new JProgressBar();
+        bar.setValue(0);
+        bar.setStringPainted(true);
+        panel.add(bar, BorderLayout.PAGE_START);
+        centerPanel.add(panel);
+        fightResult(villain, bar);
+    }
+
+    private void fightResult(Villain villain, JProgressBar bar) throws IOException {
+        SwingWorker sw1 = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                //Thread.sleep(4000);
+                fill(bar);
+
+                String res = "Finished Execution";
+                return res;
+            }
+            @Override protected void process(List chunks) {
+                // define what the event dispatch thread
+            }
+            @Override protected void done()
+            {
+               try {
+                   if (swingy.heroWinsFight(villain)) {
+                       getVillainArtefact(villain);
+                   } else
+                       loosingPrint();
+               } catch (Exception e){
+               }
+            }
+        };
+        sw1.execute();
+    }
+
+    private void loosingPrint() throws IOException {
+        clearCenterPanel();
+        restart();
+        JLabel gameOver = setIconToLabel("images/gameover.jpg");
+        gameOver.setHorizontalAlignment(SwingConstants.CENTER);
+        gameOver.setVerticalAlignment(SwingConstants.CENTER);
+        centerPanel.setLayout(new GridLayout(2, 1));
+        JLabel print = new JLabel("<html>GAME OVER <br/> GOOD LUCK FOR THE NEXT TIME<html/>", SwingConstants.CENTER);
+        centerPanel.add(gameOver);
+        centerPanel.add(print);
+    }
+
 
 }
