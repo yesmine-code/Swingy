@@ -1,7 +1,10 @@
 package org.yesmine.view.swing;
 
+import org.jboss.jandex.Main;
+import org.yesmine.App;
 import org.yesmine.controller.SwingyController;
 import org.yesmine.exceptions.ArtefactNotFoundException;
+import org.yesmine.exceptions.HeroClassNotFoundException;
 import org.yesmine.exceptions.VillainClassNotFoundException;
 import org.yesmine.model.artefacts.ArtefactEnum;
 import org.yesmine.model.hero.Hero;
@@ -15,9 +18,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.Console;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.lang.Math.sqrt;
 
 public class Swing {
 
@@ -48,7 +55,6 @@ public class Swing {
         leftPanel.setPreferredSize(new Dimension(180, 800));
         centerPanel.setPreferredSize(new Dimension(800, 600));
         initiateRightPanel();
-        initiateLeftPanel();
         frame.setLayout(new BorderLayout());
         frame.add(startPanel, BorderLayout.PAGE_START);
         frame.add(leftPanel, BorderLayout.WEST);
@@ -61,11 +67,62 @@ public class Swing {
         frame.setVisible(true);
     }
 
+    private void switchConsole(){
+        leftPanel.setLayout(new FlowLayout());
+        JLabel label = new JLabel();
+        label.setPreferredSize(new Dimension(120, 200));
+        label.setText("<html>HELLO, DO YOU WANT TO SWITCH TO CONSOLE VIEW ?" +
+                "<br/>PLEASE CLICK YES OR NO TO CONTINUE<br/></html>");
+        JButton buttonYes = new JButton("yes");
+        buttonYes.setBackground(Color.gray);
+        JButton buttonNo = new JButton("no");
+        buttonNo.setBackground(Color.gray);
+        buttonYes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                frame.setVisible(false);
+                Console console = System.console();
+                if(console == null && !GraphicsEnvironment.isHeadless()){
+                    String filename = Main.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(6);
+                    System.out.println(filename);
+                    try {
+                        Runtime.getRuntime().exec(new String[]{"java -jar " + filename + "console"});
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }else{
+                    try {
+                        String[] args = new String[1];
+                        args[0] = "console";
+                        App.main(args);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("Program has ended, please type 'exit' to close the console");
+                }
+            }
+        });
+        buttonNo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                initiateLeftPanel();
+            }
+        });
+        leftPanel.add(label);
+        leftPanel.add(buttonYes, BorderLayout.CENTER);
+        leftPanel.add(buttonNo, BorderLayout.CENTER);
+
+    }
+    public void welcome() {
+        clearLeftPanel();
+        clearCenterPanel();
+        switchConsole();
+    }
+
     private void clearLeftPanel() {
         leftPanel.removeAll();
         leftPanel.revalidate();
         leftPanel.repaint();
-
     }
 
     private void clearCenterPanel() {
@@ -75,6 +132,8 @@ public class Swing {
     }
 
     private void initiateLeftPanel() {
+        clearLeftPanel();
+        leftPanel.setLayout(new FlowLayout());
         JLabel label = new JLabel();
         label.setPreferredSize(new Dimension(120, 200));
         label.setText("<html>HELLO, ARE YOU READY FOR SOME ENTERTAINMENT!!" +
@@ -103,13 +162,8 @@ public class Swing {
     }
 
     private void initiateRightPanel() throws IOException {
-        rightPanel.setLayout(new GridLayout(2, 1));
-        JButton buttonExit = new JButton("");
-        URL url = ClassLoader.getSystemResources("images/icons8-exit-64.png").nextElement();
-        buttonExit.setContentAreaFilled(false);
-        BufferedImage buttonIcon = ImageIO.read(url);
-        buttonExit.setIcon(new ImageIcon(buttonIcon));
-        buttonExit.setPreferredSize(new Dimension(buttonIcon.getWidth(), buttonIcon.getHeight()));
+        rightPanel.setLayout(new FlowLayout());
+        JButton buttonExit = setIconToButton("images/icons8-exit-64.png");
         buttonExit.addActionListener(actionEvent -> System.exit(0));
         rightPanel.add(buttonExit);
     }
@@ -137,6 +191,10 @@ public class Swing {
         left.setIcon(rleft);
         right.setIcon(rright);
         setMove(up, down, left, right);
+        up.setPreferredSize(new Dimension(rightPanel.getWidth() / 3, rightPanel.getWidth() / 3));
+        left.setPreferredSize(new Dimension(rightPanel.getWidth() / 3, rightPanel.getWidth() / 3));
+        right.setPreferredSize(new Dimension(rightPanel.getWidth() / 3, rightPanel.getWidth() / 3));
+        down.setPreferredSize(new Dimension(rightPanel.getWidth() / 3, rightPanel.getWidth() / 3));
         arrowPanel.add(new JLabel());
         arrowPanel.add(up);
         arrowPanel.add(new JLabel());
@@ -154,8 +212,7 @@ public class Swing {
     private void startGame() throws IOException {
         if (swingy.reachBorder()) {
             printWining();
-        }
-        else {
+        } else {
             checkVillainExist();
             swingy.updateHero();
         }
@@ -227,6 +284,7 @@ public class Swing {
 
 
     private void printMap() throws IOException {
+        arrowPanel.setVisible(true);
         clearCenterPanel();
         Integer mapSize = swingy.computeMapSize(swingy.getHero());
         centerPanel.setLayout(new GridLayout(mapSize, mapSize));
@@ -282,13 +340,16 @@ public class Swing {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 createHero();
-
             }
         });
         select.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-
+                try {
+                    selectFromPreviousHeroes();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         leftPanel.add(label);
@@ -313,6 +374,7 @@ public class Swing {
                 if (getValue.length() <= 10 && getValue.length() > 0) {
                     heroName = getValue;
                     try {
+                        clearCenterPanel();
                         chooseHeroClass();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
@@ -392,7 +454,6 @@ public class Swing {
                     label.setPreferredSize(new Dimension(150, 200));
                     JButton buttonYes = new JButton("yes");
                     buttonYes.setBackground(Color.GREEN);
-
                     buttonYes.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -423,6 +484,7 @@ public class Swing {
         arrowPanel.setVisible(false);
         centerPanel.add(label);
         centerPanel.add(label2);
+        swingy.updateHero();
         restart();
     }
 
@@ -433,11 +495,7 @@ public class Swing {
         restart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                try {
-                    Swing s = new Swing(swingy);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
+                    welcome();
             }
         });
         leftPanel.add(restart);
@@ -522,34 +580,79 @@ public class Swing {
         return btn;
     }
 
-    private void run(Villain villain) throws IOException, InterruptedException {
+    private void returnToPrevious() throws IOException {
+        clearCenterPanel();
         clearLeftPanel();
-    //    clearCenterPanel();
-        if (swingy.runnigSimulation()) {
-            swingy.returnToPreviousPosition();
-            printInfos();
-            printMap();
-        } else {
-            clearLeftPanel();
-            JLabel label = new JLabel("<html>TOO LATE YOU GOT NO LUCK THIS TIME<br/>YOU MUST FIGHT<html/>");
-            label.setPreferredSize(new Dimension(120, 200));
-            leftPanel.add(label);
+        arrowPanel.setVisible(false);
+        centerPanel.setLayout(new BorderLayout());
+        JLabel label = new JLabel("<html> YOU JUST RETURNED TO PREVIOUS POSITION<html/>");
+        JButton btn = setIconToButton("images/next.png");
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                swingy.returnToPreviousPosition();
+                try {
+                    printInfos();
+                    printMap();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+        panel.add(label);
+        panel.add(new JLabel());
+        panel.add(new JLabel());
+        panel.add(btn);
+        centerPanel.add(panel, BorderLayout.CENTER);
+    }
 
-            fight(villain);
-        }
+    private void mustFight(Villain villain) throws IOException, InterruptedException {
+        clearLeftPanel();
+        clearCenterPanel();
+        arrowPanel.setVisible(false);
+        centerPanel.setLayout(new BorderLayout());
+        JLabel label = new JLabel("<html>TOO LATE YOU GOT NO LUCK THIS TIME<br/>YOU MUST FIGHT<html/>");
+        JButton btn = setIconToButton("images/next.png");
+        btn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    fight(villain);
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 2));
+        panel.add(label);
+        panel.add(new JLabel());
+        panel.add(new JLabel());
+        panel.add(btn);
+        centerPanel.add(panel, BorderLayout.CENTER);
+    }
+
+    private void run(Villain villain) throws IOException, InterruptedException {
+        if (swingy.runnigSimulation())
+            returnToPrevious();
+        else
+            mustFight(villain);
     }
 
 
     private void getVillainArtefact(Villain villain) throws IOException {
+        swingy.setNewXp(villain);
         clearLeftPanel();
         clearCenterPanel();
         leftPanel.setLayout(new FlowLayout());
         JLabel heroArtefact = setIconToLabel(ArtefactEnum.valueOf(swingy.getHero().getArtefact().getName().toUpperCase()).getImage());
         JLabel villainArtefact = setIconToLabel(ArtefactEnum.valueOf(villain.getArtefact().getName().toUpperCase()).getImage());
         JLabel heroArt = new JLabel("<html>YOUR ARTEFACT: <br/>" + swingy.getHero().getArtefact().getName().toUpperCase() + "<br/>"
-                +ArtefactEnum.valueOf(swingy.getHero().getArtefact().getName().toUpperCase()).getPower() + "<html/>");
+                + ArtefactEnum.valueOf(swingy.getHero().getArtefact().getName().toUpperCase()).getPower() + "<html/>");
         JLabel villainArt = new JLabel("<html>VILLAIN ARTEFACT: <br/>" + villain.getArtefact().getName().toUpperCase() + "<br/>"
-                +ArtefactEnum.valueOf(villain.getArtefact().getName().toUpperCase()).getPower() + "<html/>");
+                + ArtefactEnum.valueOf(villain.getArtefact().getName().toUpperCase()).getPower() + "<html/>");
         leftPanel.add(heroArtefact);
         leftPanel.add(heroArt);
         leftPanel.add(villainArtefact);
@@ -558,7 +661,7 @@ public class Swing {
         JLabel win = setIconToLabel("images/winner.png");
         win.setHorizontalAlignment(SwingConstants.CENTER);
         win.setVerticalAlignment(SwingConstants.CENTER);
-        JLabel winLabel =  new JLabel("<html>CONGRATULATIONS YOU JUST WON THIS FIGHT<br/>YOUR NEW XP = " + swingy.getHero().getExperience()
+        JLabel winLabel = new JLabel("<html>CONGRATULATIONS YOU JUST WON THIS FIGHT<br/>YOUR NEW XP = " + swingy.getHero().getExperience()
                 + "<br/>DO YOU WANT TO TAKE THE VILLAIN ARTEFACT?<br/> IF YOU DO YOU WILL DROP YOURS<br/>" + "PLEASE MAKE SURE YOU KEEP THE RIGHT ONE<html/>", SwingConstants.CENTER);
         JButton yes = new JButton("yes");
         yes.setBackground(Color.GRAY);
@@ -599,19 +702,19 @@ public class Swing {
         centerPanel.add(p, BorderLayout.CENTER);
     }
 
-    private void fill(JProgressBar bar){
+    private void fill(JProgressBar bar) {
         int i = 0;
         try {
-            while (i <= 100){
+            while (i <= 100) {
                 bar.setValue(i + 10);
                 Thread.sleep(500);
-                i+=10;
+                i += 10;
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
+
     private void fight(Villain villain) throws IOException, InterruptedException {
         clearLeftPanel();
         heroVsVillain(villain);
@@ -630,24 +733,25 @@ public class Swing {
         SwingWorker sw1 = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                //Thread.sleep(4000);
                 fill(bar);
-
                 String res = "Finished Execution";
                 return res;
             }
-            @Override protected void process(List chunks) {
+
+            @Override
+            protected void process(List chunks) {
                 // define what the event dispatch thread
             }
-            @Override protected void done()
-            {
-               try {
-                   if (swingy.heroWinsFight(villain)) {
-                       getVillainArtefact(villain);
-                   } else
-                       loosingPrint();
-               } catch (Exception e){
-               }
+
+            @Override
+            protected void done() {
+                try {
+                    if (swingy.heroWinsFight(villain)) {
+                        getVillainArtefact(villain);
+                    } else
+                        loosingPrint();
+                } catch (Exception e) {
+                }
             }
         };
         sw1.execute();
@@ -655,6 +759,7 @@ public class Swing {
 
     private void loosingPrint() throws IOException {
         clearCenterPanel();
+        swingy.updateHero();
         restart();
         JLabel gameOver = setIconToLabel("images/gameover.jpg");
         gameOver.setHorizontalAlignment(SwingConstants.CENTER);
@@ -665,5 +770,58 @@ public class Swing {
         centerPanel.add(print);
     }
 
+    private void createNewHero(){
+        centerPanel.add(new JLabel("<html> THERE IS NO PREVIOUS HEROES <br/> PLEASE CREATE YOUR OWN HERO<html/>"));
+        createHero();
+    }
+
+    private void selectFromPreviousHeroes() throws HeroClassNotFoundException, IOException, ArtefactNotFoundException {
+        clearLeftPanel();
+        clearCenterPanel();
+        List<Hero> heroes = swingy.getAllHeroes();
+        if (heroes.isEmpty()) {
+            swingy.makeEmpty();
+            createNewHero();
+            return;
+        }
+        centerPanel.setLayout(new GridLayout((int) sqrt(heroes.size()), (int)sqrt(heroes.size())));
+        for (int i = 0; i < heroes.size(); i++) {
+            JButton btn = new JButton("");
+            URL url = ClassLoader.getSystemResources(HeroEnum.valueOf(heroes.get(i).getHeroClass().toUpperCase()).getImage()).nextElement();
+            createButtonIcon(btn, url);
+            int finalI = i;
+            btn.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    clearLeftPanel();
+                    JLabel label = new JLabel();
+                    label.setText("<html>NAME = " + heroes.get(finalI).getName()  + " <br/> CLASS = " + heroes.get(finalI).getHeroClass() + "<br/>" +
+                            " ATTACK = " + heroes.get(finalI).getAttack() + "<br/> DEFENCE = " + heroes.get(finalI).getDefence() + "<br/> HITPOINTS = "
+                            + heroes.get(finalI).getHitPoints() + " <br/> XP = "+ heroes.get(finalI).getExperience()+ " <br/> ARTEFACT = "+ heroes.get(finalI).getArtefact().getName()+
+                            " <br/> POWER = " + ArtefactEnum.valueOf(heroes.get(finalI).getArtefact().getName().toUpperCase()).getPower() + "<br/> PLEASE CONFIRM YOUR CHOICE");
+                    label.setPreferredSize(new Dimension(150, 200));
+                    JButton buttonYes = new JButton("yes");
+                    buttonYes.setBackground(Color.GREEN);
+                    buttonYes.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            try {
+                                swingy.initGame(heroes.get(finalI).getId(), heroes.get(finalI).getName(),
+                                    heroes.get(finalI).getHeroClass(), heroes.get(finalI).getArtefact().toString(), heroes.get(finalI).getExperience());
+                                printInfos();
+                                printMap();
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+                    leftPanel.add(label);
+                    leftPanel.add(buttonYes);
+                }
+            });
+            centerPanel.add(btn);
+        }
+
+    }
 
 }

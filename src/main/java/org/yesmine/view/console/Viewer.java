@@ -8,6 +8,7 @@ import org.yesmine.model.artefacts.ArtefactEnum;
 import org.yesmine.model.hero.Hero;
 import org.yesmine.model.hero.HeroEnum;
 import org.yesmine.model.villain.Villain;
+import org.yesmine.view.swing.Swing;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,24 +30,55 @@ public class Viewer {
         System.out.flush();
     }
 
-    public void welcome() throws IOException {
+    private  boolean switchGui() throws IOException {
         clearScreen();
         createBanner();
-        System.out.println(Colors.GREEN_BOLD + "HELLO THERE ARE YOU READY FOR SOME ENTERTAINMENT!!");
-        System.out.println("ARE YOU!!");
-        System.out.println("PLEASE TYPE YES OR NO TO CONTINUE");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String response;
-        response = reader.readLine();
-        while (!response.equalsIgnoreCase("yes") && !response.equalsIgnoreCase("no")) {
+        System.out.println(Colors.GREEN_BOLD + "DO YOU WANT TO SWITCH TO GUI VIEW ?");
+        while (true) {
             System.out.println(Colors.RED + "PLEASE TYPE YES OR NO TO CONTINUE");
-            response = reader.readLine();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String response = reader.readLine();
             if (response.equalsIgnoreCase("no"))
-                System.exit(0);
+                return false;
+            else if (response.equalsIgnoreCase("yes")) {
+                clearScreen();
+                createBanner();
+                Swing swing = new Swing(swingy);
+                swing.welcome();
+                return true;
+            }
         }
-        System.out.println(Colors.CYAN_BRIGHT + "HELL YEEESSS!! YOU MADE THE RIGHT CHOICE");
+
     }
 
+    public void welcome() throws IOException, VillainClassNotFoundException, HeroClassNotFoundException, InterruptedException, ArtefactNotFoundException {
+        if (switchGui()) {
+            return;
+        }
+        System.out.println(Colors.GREEN_BOLD + "HELLO THERE ARE YOU READY FOR SOME ENTERTAINMENT!!");
+        System.out.println("ARE YOU!!");
+        while (true) {
+            System.out.println(Colors.RED + "PLEASE TYPE YES OR NO TO CONTINUE");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String response = reader.readLine();
+            if (response.equalsIgnoreCase("no"))
+                System.exit(0);
+            else if (response.equalsIgnoreCase("yes")){
+                System.out.println(Colors.CYAN_BRIGHT + "HELL YEEESSS!! YOU MADE THE RIGHT CHOICE");
+                createOrSelectResponse();
+                return;
+            }
+        }
+    }
+
+    private void createOrSelectResponse() throws IOException, InterruptedException, VillainClassNotFoundException, ArtefactNotFoundException, HeroClassNotFoundException {
+        String response = creatOrSelectHero();
+        if ("c".equalsIgnoreCase(response))
+            createHero();
+        else if ("s".equalsIgnoreCase(response))
+            selectHero();
+        startGame();
+    }
     private void createBanner() {
         System.out.println(Colors.YELLOW_BOLD_BRIGHT + "\t\t\t" + " ______        _____ _   _  ______   __");
         System.out.println(Colors.YELLOW_BOLD_BRIGHT + "\t\t\t" + "/ ___\\ \\      / /_ _| \\ | |/ ___\\ \\ / /");
@@ -59,19 +91,17 @@ public class Viewer {
     public String creatOrSelectHero() throws IOException {
         clearScreen();
         createBanner();
-        System.out.println(Colors.PURPLE_UNDERLINED + "C" + Colors.PURPLE + "REATE OR " + Colors.PURPLE_UNDERLINED + "S" + Colors.PURPLE + "ELECT YOUR HERO");
-        System.out.println(Colors.RED + "PLEASE ENTER C TO CREATE, S TO SELECT, Q TO QUIT");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String response;
-        response = reader.readLine();
-        while (!response.equalsIgnoreCase("c") &&
-                !response.equalsIgnoreCase("s") && !response.equalsIgnoreCase("q")) {
+        while (true) {
             System.out.println(Colors.RED + "PLEASE ENTER C TO CREATE, S TO SELECT, Q TO QUIT");
-            response = reader.readLine();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            String response = reader.readLine();
             if (response.equalsIgnoreCase("q"))
                 System.exit(0);
+            else if (response.equalsIgnoreCase("c") ||
+                    response.equalsIgnoreCase("s")){
+                return response;
+            }
         }
-        return response;
     }
 
     public void createHero() throws IOException, VillainClassNotFoundException, ArtefactNotFoundException {

@@ -20,8 +20,11 @@ public class SwingyController {
     private ArtefactService artefactService;
     private HeroDao heroDao;
 
-    public SwingyController() throws IOException {
-        heroDao = new FileDao();
+    public SwingyController(Boolean db) throws IOException {
+        if (!db)
+            heroDao = new FileDao();
+        else
+            heroDao = new DatabaseDao();
         heroService = new HeroService(heroDao);
         villainService = new VillainService();
         mapService = new MapService(villainService);

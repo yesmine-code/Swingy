@@ -12,11 +12,13 @@
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/ArtefactEnum.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/controller/ArtefactService.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/dao/HeroDao.java
+/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/view/swing/RotatedIcon.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/dao/DatabaseDao.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/HeroFactory.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/artefacts/Armor.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/VillainFactory.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/VillainEnum.java
+/home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/view/swing/ImagePanel.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/hero/Hero.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/model/villain/Villain.java
 /home/yesmine/Desktop/Swingy/src/main/java/org/yesmine/controller/SwingyController.java
