@@ -1,30 +1,32 @@
 package org.yesmine.view.swing;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
-public class ImagePanel extends JPanel{
+public class ImagePanel extends JPanel {
+    String imagePath;
 
-    private BufferedImage image;
-
-    public ImagePanel(String filePath) {
-        try {
-            image = ImageIO.read(new File(filePath));
-        } catch (IOException ex) {
-            // handle exception...
-        }
+    public ImagePanel(String imagePath) {
+        super();
+        this.imagePath = imagePath;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(image, 0, 0, this); // see javadoc for more info on the parameters
-    }
 
+        super.paintComponent(g);
+        try {
+            URL url = ClassLoader.getSystemResources(imagePath).nextElement();
+            BufferedImage bgImage = ImageIO.read(url);
+
+            g.drawImage(bgImage, this.getWidth() / 2 - bgImage.getWidth() / 2, 0, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
